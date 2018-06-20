@@ -1,0 +1,81 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<!-- <section class="content">
+  <mgl-map
+  [style]="'mapbox://styles/mapbox/streets-v9'"
+  [zoom]="[15]"
+  [center]="[-122.486052, 37.830348]"
+>
+<mgl-image
+      id="cat"
+      url="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png"
+      (loaded)="imageLoaded = true"
+    >
+    </mgl-image>
+    <mgl-layer
+      *ngIf="imageLoaded"
+      id="points"
+      type="symbol"
+      [source]="imageSource"
+      [layout]="{'icon-image': 'cat', 'icon-size': 0.25}"
+    >
+    </mgl-layer>
+
+  <mgl-geojson-source
+    id="oneline"
+  >
+    <mgl-feature
+      [geometry]="geometry"
+    >
+    </mgl-feature>
+  </mgl-geojson-source>
+  <mgl-layer
+    id="route"
+    type="line"
+    source="oneline"
+    [layout]="{
+      'line-join': 'round',
+      'line-cap': 'round'
+    }"
+    [paint]="{
+      'line-color': '#888',
+      'line-width': 8
+    }"
+  >
+  </mgl-layer>
+</mgl-map>
+ </section>
+ <search-text></search-text>
+ <list-data></list-data> -->
+ <mgl-map
+    [style]="'mapbox://styles/mapbox/streets-v9'"
+    [zoom]="zoom"
+    [center]="center"
+    [centerWithPanTo]="true"
+    [pitch]="pitch"
+    movingMethod="jumpTo"
+  >
+  <mgl-marker id="cat" *ngIf="showMarker" [lngLat]="coord">
+    <div (click)="alert('Foo')" class="marker" style="background-image: url(../assets/images/car.jpg);">
+    </div>
+  </mgl-marker>
+   
+    <mgl-geojson-source
+      *ngIf="data"
+      id="trace"
+      [data]="data"
+    >
+    </mgl-geojson-source>
+    <mgl-layer
+      *ngIf="data"
+      id="trace"
+      type="line"
+      source="trace"
+      [paint]="{
+        'line-color': 'blue',
+        'line-opacity': 0.75,
+        'line-width': 5
+      }"
+    >
+    </mgl-layer>
+    <!-- <img src="../assets/images/car.ico"> -->
+  </mgl-map>
