@@ -13,5 +13,6 @@ mgl-map {
   background-position: center center;
   background-size: 100%;
   background-repeat: no-repeat;
+  border-radius: 25px;
 
 }
