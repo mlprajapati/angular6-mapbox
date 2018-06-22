@@ -1,0 +1,18 @@
+:host, .content {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+}
+mgl-map {
+  height: 100%;
+  width: 100%;
+}
+.marker{
+  width:15px;
+  height:30px;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+
+}

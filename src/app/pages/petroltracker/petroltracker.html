@@ -1,0 +1,21 @@
+<section class="content">
+    <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true" [pitch]="pitch"
+        movingMethod="jumpTo">
+        <!-- [lngLat]="coord" -->
+        <mgl-marker id="cat" *ngIf="showMarker" [feature]="feature">
+        
+        <div (click)="alert('Foo')" class="marker"  [ngStyle]="rotateMarker" style="background-image: url(../assets/images/car.png);">
+        </div>
+        </mgl-marker>
+    
+    
+        <mgl-geojson-source *ngIf="data" id="trace" [data]="data">
+        </mgl-geojson-source>
+        <mgl-layer *ngIf="data" id="trace" type="line" source="trace" [paint]="{
+            'line-color': 'blue',
+            'line-opacity': 0.75,
+            'line-width': 5
+        }">
+        </mgl-layer>
+    </mgl-map>
+    </section>
