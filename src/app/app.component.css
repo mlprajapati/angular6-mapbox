@@ -8,11 +8,11 @@ mgl-map {
   width: 100%;
 }
 .marker{
-  width:30px;
-  height:25px;
+  width:15px;
+  height:30px;
   background-position: center center;
-  background-size: 100%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  border-radius: 25px;
+  border-radius: 5px;
 
 }

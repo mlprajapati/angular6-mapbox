@@ -1,11 +1,12 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
 <section class="content">
-  <mgl-map [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true" [pitch]="pitch"
+  <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true" [pitch]="pitch"
     movingMethod="jumpTo">
     <!-- [lngLat]="coord" -->
     <mgl-marker id="cat" *ngIf="showMarker" [feature]="feature">
-      <div (click)="alert('Foo')" class="marker" style="background-image: url(../assets/images/car.jpg);">
+      
+      <div (click)="alert('Foo')" class="marker"  [ngStyle]="rotateMarker" style="background-image: url(../assets/images/car.png);">
       </div>
     </mgl-marker>
 
