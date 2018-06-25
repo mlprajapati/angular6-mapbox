@@ -4,19 +4,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GlobalState } from './global.state';
 import { FormsModule } from '@angular/forms';
-
-import {SearchComponent} from './components/search/search.component'
 import { AppComponent } from './app.component';
-import { ListComponent } from './components/list/list.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AppRoutingModule } from './app.routing';
 import { PagesModule } from './pages/pages.module';
+import { SharedModule } from './shared/shared.module';
+import { ProgressInterceptor } from './shared/progress.interceptor';
+import { ProgressBarService } from './shared/services/progress-bar.service';
+import { TimingInterceptor } from './shared/timing.interceptor';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { PetrolTrackerService } from './pages/petroltracker/petroltracker.service';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    SearchComponent,
-    ListComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -24,9 +26,18 @@ import { PagesModule } from './pages/pages.module';
     PagesModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SharedModule.forRoot()
   ],
-  providers: [GlobalState],
+  providers: [AuthGuard,GlobalState,
+  {provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressBarService]},
+  {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
+  PetrolTrackerService,
+  {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
