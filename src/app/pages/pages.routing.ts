@@ -13,11 +13,11 @@ export const routes: Routes = [
     path: 'pages',
     component: Pages,
     children: [
-      { path: 'home', loadChildren:()=>HomeModule
+      { path: 'home', loadChildren:'./home/home.module#HomeModule'
       },
-      { path: '',  loadChildren: ()=>HomeModule
+      { path: '',  loadChildren: './home/home.module#HomeModule'
       },
-      { path: 'petroltracker',  loadChildren:()=>PetrolTrackerModule
+      { path: 'petroltracker',  loadChildren:'./petroltracker/petroltracker.module#PetrolTrackerModule'
       }
 
     ]
