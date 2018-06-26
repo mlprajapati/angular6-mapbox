@@ -1,4 +1,5 @@
 /* Master Styles */
+@import '../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import "~mapbox-gl/dist/mapbox-gl.css";
 @import "~@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css";
 body {

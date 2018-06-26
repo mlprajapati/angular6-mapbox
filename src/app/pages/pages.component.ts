@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'pages',
   template: `
+        <mat-spinner></mat-spinner>
         <router-outlet></router-outlet>
     `,
     styles:[`:host {
