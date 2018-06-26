@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'pages',
-  template: `
-        <mat-spinner></mat-spinner>
-        <router-outlet></router-outlet>
+  template: `<div fxLayout="column" fxLayoutAlign="center center" style="background-color:blue;">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div class="container">
+           
+            <router-outlet></router-outlet>
+        </div>
     `,
     styles:[`:host {
       display: flex;
