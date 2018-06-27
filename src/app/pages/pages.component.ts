@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-
+// <div fxLayout fxLayoutAlign="center center" style="background-color:blue;">
+//           <mat-spinner></mat-spinner>
+//         </div>
 @Component({
   selector: 'pages',
-  template: `<div fxLayout="column" fxLayoutAlign="center center" style="background-color:blue;">
-          <mat-spinner></mat-spinner>
-        </div>
+  template: `
         <div class="container">
-           
             <router-outlet></router-outlet>
         </div>
     `,
@@ -16,7 +15,7 @@ import { Component, OnInit } from '@angular/core';
       flex: 1;
       height: 100vh;
     }    
-    div {
+    .container {
       display: flex;
       height: 100%;
       align-items: center;

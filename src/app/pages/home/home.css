@@ -1,0 +1,26 @@
+.header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background-color: rgb(64, 154, 214);
+    color: white;
+    text-align: center;
+ }
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+ }
+ .content {
+    display: flex;
+    height: calc(100% - 100px);
+    background-color: yellow;
+    position: fixed;
+    top: 50px;
+    width: 100%;
+  }
