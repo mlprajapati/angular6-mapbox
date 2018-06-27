@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LngLatLike } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
+import { MatBottomSheet } from '@angular/material';
+import { JobdetailComponent } from './jobdetail/jobdetail.component';
 
 @Component({
   selector: 'petroltracker',
@@ -22,7 +24,7 @@ export class PetrolTrackerComponent implements OnInit {
     'transform': 'rotate(-20deg)'
   }
   private timer: number;
-
+  isDetailedView: boolean = false;
   feature: any = {
     'type': 'Feature',
     'properties': {
@@ -40,7 +42,12 @@ export class PetrolTrackerComponent implements OnInit {
   alert(message: string) {
     alert(message);
   }
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient,public bottomSheet: MatBottomSheet) {
+    
+   }
+   openBottomSheet(): void {
+    this.bottomSheet.open(JobdetailComponent);
+  }
   ngOnInit() {
       this.http.get('../assets/hike.geo.json').subscribe(response => {
       const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>response;
@@ -86,6 +93,10 @@ export class PetrolTrackerComponent implements OnInit {
       this.initialAngel += (Math.random() - 0.5) / 2;
      }
      return angle;
+  }
+  //Detail view
+   openDetails () {
+    this.isDetailedView = true;
   }
   
   ngOnDestroy() {

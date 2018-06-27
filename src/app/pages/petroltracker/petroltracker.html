@@ -1,4 +1,4 @@
-<section class="mapContent">
+<section class="mapContent"  *ngIf="!isDetailedView">
     <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true" [pitch]="pitch"
         movingMethod="jumpTo">
         <!-- [lngLat]="coord" -->
@@ -19,6 +19,11 @@
         </mgl-layer>
     </mgl-map>
     </section>
-    <div class="footer">
-        <p>Footer</p>
+    <div class="footer"  *ngIf="!isDetailedView" (click)="openBottomSheet()">
+        <p> 
+            Estimates Travel Time :?
+                <span class="footerDiv" style="float:right">23 min</span>
+            </p>
     </div>
+  
+    

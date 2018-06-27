@@ -1,7 +1,6 @@
 import {
     MatAutocompleteModule,
     MatButtonModule,
-    MatCardModule,
     MatDialogModule,
     MatGridListModule,
     MatIconModule,
@@ -14,16 +13,17 @@ import {
     MatSnackBarModule,
     MatTooltipModule,
     MatSidenavModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCardModule
   } from '@angular/material';
   import {NgModule} from '@angular/core';
+  //import {MatCardModule} from '@angular/material/card';
   
   @NgModule({
     imports: [
       MatButtonModule,
       MatMenuModule,
       MatIconModule,
-      MatCardModule,
       MatSliderModule,
       MatProgressBarModule,
       MatAutocompleteModule,
@@ -35,13 +35,14 @@ import {
       MatListModule,
       MatDialogModule,
       MatSidenavModule,
-      MatToolbarModule
+      MatToolbarModule,
+      MatCardModule
+      
     ],
     exports: [
       MatButtonModule,
       MatMenuModule,
       MatIconModule,
-      MatCardModule,
       MatSliderModule,
       MatProgressBarModule,
       MatAutocompleteModule,
@@ -53,7 +54,9 @@ import {
       MatListModule,
       MatDialogModule,
       MatSidenavModule,
-      MatToolbarModule
+      MatToolbarModule,
+      MatCardModule
+      
     ],
   })
   

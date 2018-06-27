@@ -6,7 +6,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 @NgModule({
   imports: [
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+   // MatCardModule
     
   ],
   exports: [

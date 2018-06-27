@@ -27,7 +27,15 @@ mgl-map {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: red;
-  color: white;
+  background-color: white;
+  color: black;
   text-align: center;
+}
+.example-card {
+  max-width: 400px;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
 }
