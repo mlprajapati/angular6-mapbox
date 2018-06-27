@@ -30,7 +30,7 @@ import { AuthGuard } from './guards/auth.guard';
     SharedModule.forRoot()
   ],
   providers: [AuthGuard,GlobalState,
-  {provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressBarService]},
+  //{provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressBarService]},
   {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
   PetrolTrackerService,
   {

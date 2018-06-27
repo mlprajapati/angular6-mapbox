@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'pages',
   template: `
         <div class="container">
+          <app-header></app-header>
             <router-outlet></router-outlet>
         </div>
     `,

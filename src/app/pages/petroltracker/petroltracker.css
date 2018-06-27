@@ -1,7 +1,13 @@
-:host, .content {
+:host, .mapContent {
   display: flex;
+  -ms-flex: 1;
   flex: 1;
+  -ms-flex-direction: row;
   flex-direction: row;
+  height: calc(100vh - 100px);
+  position: fixed;
+  top: 50px;
+  width: 100%;
 }
 mgl-map {
   height: 100%;
@@ -15,4 +21,13 @@ mgl-map {
   background-repeat: no-repeat;
   border-radius: 5px;
 
+}
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
 }
