@@ -8,12 +8,12 @@
       </p>
         <span>Did you like using 'Track my patrol' feature?</span>
         <br>
-        <div style="text-align: center;width: 100%;">
-        <mat-button-toggle-group #group="matButtonToggleGroup" style="margin-top: 10px; width: 100%;">
-          <mat-button-toggle value="yes" [checked]="true" (change)="textAreaToggler(true)">
+        <div style="text-align: center">
+        <mat-button-toggle-group #group="matButtonToggleGroup" (change)="textAreaToggler(group.value)">
+          <mat-button-toggle value="yes" [checked]="true" >
             Yes
           </mat-button-toggle>
-          <mat-button-toggle value="no"  (change)="textAreaToggler(false)">
+          <mat-button-toggle value="no" >
             No
           </mat-button-toggle>
         </mat-button-toggle-group>

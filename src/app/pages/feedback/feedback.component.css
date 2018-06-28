@@ -53,19 +53,5 @@ textarea{
 .mat-button-toggle {
     white-space: nowrap;
     position: relative;
-    width: 100%;
-}
-.mat-button-toggle-label-content {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    display: inline-block;
-    line-height: 36px;
-    padding: 0 16px;
-    cursor: pointer;
-    width: 100% !important;
-}
-label{
-    width:100% !important;
+   
 }

@@ -19,4 +19,7 @@ body {
 .btn-color{
   background-color: #0b62c5;
 }
-
+.mat-button-toggle-label-content {
+ 
+  width: 80%;
+}
