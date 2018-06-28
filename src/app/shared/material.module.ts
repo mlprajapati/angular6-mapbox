@@ -1,6 +1,7 @@
 import {
     MatAutocompleteModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatDialogModule,
     MatGridListModule,
     MatIconModule,
@@ -10,6 +11,7 @@ import {
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatSnackBarModule,
     MatTooltipModule,
     MatSidenavModule,
@@ -22,9 +24,11 @@ import {
   @NgModule({
     imports: [
       MatButtonModule,
+      MatButtonToggleModule,
       MatMenuModule,
       MatIconModule,
       MatSliderModule,
+      MatSlideToggleModule,
       MatProgressBarModule,
       MatAutocompleteModule,
       MatInputModule,
@@ -41,9 +45,11 @@ import {
     ],
     exports: [
       MatButtonModule,
+      MatButtonToggleModule,
       MatMenuModule,
       MatIconModule,
       MatSliderModule,
+      MatSlideToggleModule,
       MatProgressBarModule,
       MatAutocompleteModule,
       MatInputModule,

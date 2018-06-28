@@ -1,30 +1,50 @@
-
-  <div class="content">
-      <mat-card class="example-card">
-          <mat-card-header>
-           <!--  <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>Shiba Inu</mat-card-title>
-            <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
-            
-            
-          </mat-card-header>
-          <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-          <mat-card-content>
-            <p>
-            <!--   The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+<div class="content">
+  <mat-card class="feedback-card">
+   
+    <mat-card-content>
+      <p>
+        <!--   The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
               A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
               bred for hunting. -->
-              You have requested for a RACV patrol van to arrive at:
-              <br><br>
-              <strong>485, Bourke Street, Melbourne</strong>
-              <br><br><br><br>
-              Your estimated time to arrival is calculated based on various traffic statistics, and may vary based on real-time traffic.
-            </p>
-          </mat-card-content>
+        You have requested for a RACV patrol van to arrive at:
+        <br>
+        <br>
+        <strong>485, Bourke Street, Melbourne</strong>
+        <br>
+      </p>
+        <form class="feedback-form">
+            
+                <mat-button-toggle-group #group="matButtonToggleGroup">
+                    <mat-button-toggle value="yes" [checked]= "true">
+                        Yes
+                    </mat-button-toggle>
+                    <mat-button-toggle value="no">
+                       No
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+          <br>
+          <br>
+          <br>
+          If no, how come?
+          <br> 
+          <br>
+            
+              <textarea  placeholder="Leave a comment" style="width:100%;height:150px;border: 2px solid gray;"></textarea>
+           
+          </form>
         
-        </mat-card>
-    </div>
+        <br>
+        <br>
+        <br>
+   
+    </mat-card-content>
+  </mat-card>
+
+  
+
+
+</div>
 
 <div class="footer">
-    <p>Footer</p>
-  </div>
+  <p>Footer</p>
+</div>

@@ -7,8 +7,34 @@
     color: black;
     text-align: center;
   }
-  .example-card {
+  .feedback-card {
     padding-top:5px;
-    max-width: 400px;
+   /*  max-width: 400px; */
+    width:100%;
     margin-bottom: 50px;
+    max-width: 700px;
   }
+  .example-h2 {
+    margin: 10px;
+  }
+  
+  .example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  
+  .example-margin {
+    margin: 10px;
+  }
+  .feedback-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .feedback-full-width {
+    width: 100%;
+  }
+  
