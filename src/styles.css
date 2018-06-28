@@ -10,10 +10,13 @@ body {
 }
 .content {
   display: flex;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 68px);
   position: fixed;
-  top: 50px;
+  top: 58px;
   width: 100%;
   justify-content: center;
+}
+.btn-color{
+  background-color: #0b62c5;
 }
 

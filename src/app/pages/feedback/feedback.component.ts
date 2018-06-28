@@ -1,14 +1,16 @@
 import { Component, OnInit } from "@angular/core";
+
 @Component({
   selector: "app-feedback",
   templateUrl: "./feedback.component.html",
   styleUrls: ["./feedback.component.css"]
 })
 export class FeedbackComponent implements OnInit {
-  color = "accent";
-  checked = false;
-  disabled = false;
+  enableTextArea:boolean = true;
   constructor() {}
 
   ngOnInit() {}
+  textAreaToggler(param){
+    this.enableTextArea = param;
+  }
 }

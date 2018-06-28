@@ -1,50 +1,32 @@
-<div class="content">
+ <form class="feedback-form">
+ <div class="content">
   <mat-card class="feedback-card">
-   
     <mat-card-content>
-      <p>
-        <!--   The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-              A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-              bred for hunting. -->
-        You have requested for a RACV patrol van to arrive at:
-        <br>
-        <br>
-        <strong>485, Bourke Street, Melbourne</strong>
+      <p style="margin-top:7vh">
+        <b>Please take a moment to review our portal tracking services:</b>
         <br>
       </p>
-        <form class="feedback-form">
-            
-                <mat-button-toggle-group #group="matButtonToggleGroup">
-                    <mat-button-toggle value="yes" [checked]= "true">
-                        Yes
-                    </mat-button-toggle>
-                    <mat-button-toggle value="no">
-                       No
-                    </mat-button-toggle>
-                </mat-button-toggle-group>
-          <br>
-          <br>
-          <br>
-          If no, how come?
-          <br> 
-          <br>
-            
-              <textarea  placeholder="Leave a comment" style="width:100%;height:150px;border: 2px solid gray;"></textarea>
-           
-          </form>
-        
+        <span>Did you like using 'Track my patrol' feature?</span>
         <br>
-        <br>
-        <br>
-   
+        <div style="text-align: center;width: 100%;">
+        <mat-button-toggle-group #group="matButtonToggleGroup" style="margin-top: 10px; width: 100%;">
+          <mat-button-toggle value="yes" [checked]="true" (change)="textAreaToggler(true)">
+            Yes
+          </mat-button-toggle>
+          <mat-button-toggle value="no"  (change)="textAreaToggler(false)">
+            No
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+        <div style="margin-top: 20vh;" *ngIf="enableTextArea">
+          <span style="float:left"> If no, how come?</span>
+          <br>
+          <textarea placeholder="Leave a comment"></textarea>
+        </div>
     </mat-card-content>
   </mat-card>
-
-  
-
-
 </div>
 
-<div class="footer">
-  <p>Footer</p>
-</div>
+<div class="footer btn-color">
+  <button mat-raised-button color="primary">Submit</button>
+</div> </form>
