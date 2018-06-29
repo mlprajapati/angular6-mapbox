@@ -1,32 +1,32 @@
  <form class="feedback-form">
- <div class="content">
-  <mat-card class="feedback-card">
+ <div class="content" fxLayout="row" fxLayoutAlign="center">
+  <mat-card class="feedback-card" fxFlex="90%" fxFlex.gt-md="60%" fxFlex.gt-sm="90%">
     <mat-card-content>
-      <p style="margin-top:7vh">
+      <div class="gap">
         <b>Please take a moment to review our portal tracking services:</b>
-        <br>
-      </p>
-        <span>Did you like using 'Track my patrol' feature?</span>
-        <br>
-        <div style="text-align: center">
-        <mat-button-toggle-group #group="matButtonToggleGroup" (change)="textAreaToggler(group.value)">
-          <mat-button-toggle value="yes" [checked]="true" >
-            Yes
+       
+      </div>
+        <div class="gap50">Did you like using 'Track my patrol' feature?</div>
+        
+        <div fxLayout="row" fxLayoutAlign="center" class="gap">
+        <mat-button-toggle-group fxFlex="90%" fxFlex.gt-md="50%" fxFlex.gt-xs="40%" #group="matButtonToggleGroup" (change)="textAreaToggler(group.value)">
+          <mat-button-toggle value="yes" [checked]="true" fxFlex="100%" fxLayoutAlign="center">
+            <b>Yes</b>
           </mat-button-toggle>
-          <mat-button-toggle value="no" >
-            No
+          <mat-button-toggle value="no" fxFlex="100%" fxLayoutAlign="center">
+            <b>No</b>
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-        <div style="margin-top: 20vh;" *ngIf="enableTextArea">
-          <span style="float:left"> If no, how come?</span>
-          <br>
-          <textarea placeholder="Leave a comment"></textarea>
-        </div>
+      <div class="gap" *ngIf="enableTextArea">
+        <div> If no, how come?</div>
+        <div><textarea class="gap10" placeholder="Leave a comment"></textarea></div>
+        
+      </div>
     </mat-card-content>
   </mat-card>
 </div>
 
-<div class="footer btn-color">
-  <button mat-raised-button color="primary">Submit</button>
+<div class="footer btn-color" fxLayoutAlign="center center">
+  <button mat-raised-button color="primary" fxFlex="90%" fxFlex.gt-md="50%" fxFlex.gt-xs="40%">Submit</button>
 </div> </form>
