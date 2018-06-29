@@ -5,14 +5,16 @@ import { routing } from './feedback.routing';
 import { SharedModule } from '../../shared/shared.module';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
+import { GreetingsComponent } from './greetings';
 
 @NgModule({
   imports: [
-    CommonModule,routing,SharedModule,FormsModule
+    CommonModule,routing,SharedModule,FormsModule,MatBottomSheetModule
   ],
   declarations: [
-    FeedbackComponent
+    FeedbackComponent,GreetingsComponent
   ],
   providers: [MatBottomSheet],
+  entryComponents: [FeedbackComponent, GreetingsComponent]
 })
 export class FeedbackModule { }

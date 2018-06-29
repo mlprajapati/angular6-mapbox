@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatBottomSheetRef } from '@angular/material';
+//import { MatBottomSheetRef } from '@angular/material';
 import { HeaderComponent } from '../../../shared/components/header/header.component';
 
 @Component({
@@ -9,11 +9,12 @@ import { HeaderComponent } from '../../../shared/components/header/header.compon
 })
 export class GreetingsComponent{
 
-  constructor(private bottomSheetRef: MatBottomSheetRef<GreetingsComponent>) { }
+  constructor() { }
 
-  goBack(event: MouseEvent):void{
+  /* goBack(event: MouseEvent):void{
     this.bottomSheetRef.dismiss();
     event.preventDefault();
-  }
+  } */
+  
 
 }
