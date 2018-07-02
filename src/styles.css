@@ -40,4 +40,11 @@ body {
 .gap50{
   margin-top:50px;
 }
+@media only screen and (max-height: 568px) {
+  .content {
+     /*  min-height: 450px; */
+      overflow: scroll;
+    /*   height: 450px; */
+  }
+}
 

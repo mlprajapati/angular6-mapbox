@@ -16,7 +16,7 @@ export const routes: Routes = [
       },
       { path: '',  loadChildren: './home/home.module#HomeModule'
       },
-      { path: 'petroltracker',  loadChildren:'./petroltracker/petroltracker.module#PetrolTrackerModule'
+      { path: 'patroltracker',  loadChildren:'./petroltracker/petroltracker.module#PetrolTrackerModule'
       },
       { path: 'feedback',  loadChildren:'./feedback/feedback.module#FeedbackModule'
       }
