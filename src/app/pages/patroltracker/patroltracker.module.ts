@@ -24,4 +24,4 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
   providers: [MatBottomSheet],
   entryComponents: [PatrolTrackerComponent, JobdetailComponent]
 })
-export class PetrolTrackerModule { }
+export class PatrolTrackerModule { }
