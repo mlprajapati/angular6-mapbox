@@ -25,6 +25,32 @@ export class PatrolTrackerComponent implements OnInit {
   }
   private timer: number;
   isDetailedView: boolean = false;
+  destfeature: any ={
+    'type': 'Feature',
+    'properties': {
+      'message': 'Foo',
+      'iconSize': [60, 60]
+    },
+    'geometry': {
+      'type': 'Point',
+      'coordinates': [
+        144.959936, -37.815563
+      ]
+    }
+  };
+  sourcefeature: any ={
+    'type': 'Feature',
+    'properties': {
+      'message': 'Foo',
+      'iconSize': [60, 60]
+    },
+    'geometry': {
+      'type': 'Point',
+      'coordinates': [
+        145.180533, -37.952297
+      ]
+    }
+  };
   feature: any = {
     'type': 'Feature',
     'properties': {
@@ -57,14 +83,14 @@ export class PatrolTrackerComponent implements OnInit {
       this.coord = coordinates[0];
       this.feature.geometry!.coordinates = coordinates[0];
       this.data = data;
-      this.center = coordinates[0];
+      this.center = [145.07416155, -37.8844967];//coordinates[0];
       this.zoom = [14];
       this.pitch = 30;
       this.showMarker = true;
       let i = 0;
       this.timer = window.setInterval(() => {
         if (i < coordinates.length-1) {
-          this.center = coordinates[i];
+         // this.center = coordinates[i];
          // data.features[0].geometry!.coordinates.push(coordinates[i]);
          if(i<coordinates.length){
           this.rotateMarker["-ms-transform"] = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1])+'deg)';
@@ -79,7 +105,7 @@ export class PatrolTrackerComponent implements OnInit {
           i++;
         } else {
           window.clearInterval(this.timer);
-          this.showMarker = false;
+          //this.showMarker = false;
         }
       }, 10);
     });

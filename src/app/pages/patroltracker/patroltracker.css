@@ -22,6 +22,16 @@ mgl-map {
   border-radius: 5px;
 
 }
+.markersource{
+  width:15px;
+  height:15px;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+  background-color: brown;
+
+}
 .footer {
   position: fixed;
   left: 0;

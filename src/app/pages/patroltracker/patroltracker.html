@@ -2,11 +2,21 @@
     <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true" [pitch]="pitch"
         movingMethod="jumpTo">
         <!-- [lngLat]="coord" -->
-        <mgl-marker id="cat" *ngIf="showMarker" [feature]="feature">
+        <!-- <mgl-marker id="cat" *ngIf="showMarker" [feature]="feature">
         
         <div (click)="alert('Foo')" class="marker"  [ngStyle]="rotateMarker" style="background-image: url(../assets/images/car.png);">
         </div>
-        </mgl-marker>
+        </mgl-marker> -->
+        <mgl-marker id="dest" *ngIf="showMarker" [feature]="sourcefeature">
+        
+            <div (click)="alert('Foo')" class="markersource"  [ngStyle]="rotateMarker">
+            </div>
+            </mgl-marker>
+        <mgl-marker id="source" *ngIf="showMarker" [feature]="destfeature">
+    
+            <div  class="marker"  [ngStyle]="rotateMarker"  style="background-image: url(../assets/images/car.png);">
+            </div>
+            </mgl-marker>
     
     
         <mgl-geojson-source *ngIf="data" id="trace" [data]="data">
