@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';  
 import { NgModule } from '@angular/core';
-import { PetrolTrackerComponent } from './petroltracker.component';
-import { routing } from './petroltracker.routing';
+import { PatrolTrackerComponent } from './patroltracker.component';
+import { routing } from './patroltracker.routing';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
 import { SharedModule } from '../../shared/shared.module';
@@ -18,10 +18,10 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
     SharedModule
   ],
   declarations: [
-    PetrolTrackerComponent,
+    PatrolTrackerComponent,
     JobdetailComponent
   ],
   providers: [MatBottomSheet],
-  entryComponents: [PetrolTrackerComponent, JobdetailComponent]
+  entryComponents: [PatrolTrackerComponent, JobdetailComponent]
 })
 export class PetrolTrackerModule { }

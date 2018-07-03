@@ -5,11 +5,11 @@ import { MatBottomSheet } from '@angular/material';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
 
 @Component({
-  selector: 'petroltracker',
-  templateUrl: './petroltracker.html',
-  styleUrls: ['./petroltracker.css']
+  selector: 'patroltracker',
+  templateUrl: './patroltracker.html',
+  styleUrls: ['./patroltracker.css']
 })
-export class PetrolTrackerComponent implements OnInit {
+export class PatrolTrackerComponent implements OnInit {
 
   data: GeoJSON.FeatureCollection<GeoJSON.LineString>;
   center: LngLatLike;

@@ -9,7 +9,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     constructor() { }
  
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let petrolservice: any[] = JSON.parse(localStorage.getItem('petrolservice')) || [];
+        let petrolservice: any[] = JSON.parse(localStorage.getItem('patrolservice')) || [];
         return of(null).pipe(mergeMap(() => {
             if (request.url.endsWith('/api/tokenauthenticate') && request.method === 'POST') {
                 let filteredPs = petrolservice.filter(ps => {
@@ -27,7 +27,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 }
             }
  
-            if (request.url.endsWith('/api/petroledetail') && request.method === 'GET') {
+            if (request.url.endsWith('/api/patroledetail') && request.method === 'GET') {
                 if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
                     return of(new HttpResponse({ status: 200, body: petrolservice }));
                 } else {

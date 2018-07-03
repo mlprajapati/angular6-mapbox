@@ -1,12 +1,12 @@
 import { Routes, RouterModule }  from '@angular/router';
-import { PetrolTrackerComponent } from './petroltracker.component';
+import { PatrolTrackerComponent } from './patroltracker.component';
 import { ModuleWithProviders } from '@angular/core';
 
 // noinspection TypeScriptValidateTypes
 export const routes: Routes = [
   {
     path: '',
-    component: PetrolTrackerComponent
+    component: PatrolTrackerComponent
    }  
 ];
 
