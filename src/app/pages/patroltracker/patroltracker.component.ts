@@ -77,6 +77,7 @@ export class PatrolTrackerComponent implements OnInit {
   ngOnInit() {
       this.http.get('../assets/hike.geo.json').subscribe(response => {
       const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>response;
+      debugger
       const coordinates = data.features[0].geometry!.coordinates;
       //data.features[0].geometry!.coordinates = [coordinates[0]];
       data.features[0].geometry!.coordinates = coordinates;
@@ -99,6 +100,7 @@ export class PatrolTrackerComponent implements OnInit {
           this.rotateMarker = Object.assign({},this.rotateMarker);
           this.feature.geometry!.coordinates = coordinates[i];
           this.feature = Object.assign({}, this.feature);
+          this.destfeature = Object.assign({}, this.feature);
          }
           this.coord = coordinates[i];
           this.data = { ...this.data };
@@ -107,7 +109,7 @@ export class PatrolTrackerComponent implements OnInit {
           window.clearInterval(this.timer);
           //this.showMarker = false;
         }
-      }, 10);
+      }, 1000);
     });
   }
   private calculateAngel(lat1:number,lon1:number){
