@@ -13,7 +13,7 @@ import { ProgressInterceptor } from './shared/progress.interceptor';
 import { ProgressBarService } from './shared/services/progress-bar.service';
 import { TimingInterceptor } from './shared/timing.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
-import { PetrolTrackerService } from './pages/petroltracker/petroltracker.service';
+import { PatrolTrackerService } from './pages/patroltracker/patroltracker.service';
 import { AuthGuard } from './guards/auth.guard';
 @NgModule({
   declarations: [
@@ -32,7 +32,7 @@ import { AuthGuard } from './guards/auth.guard';
   providers: [AuthGuard,GlobalState,
   //{provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressBarService]},
   {provide: HTTP_INTERCEPTORS, useClass: TimingInterceptor, multi: true},
-  PetrolTrackerService,
+  PatrolTrackerService,
   {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
