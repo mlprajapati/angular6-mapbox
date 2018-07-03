@@ -77,21 +77,21 @@ export class PatrolTrackerComponent implements OnInit {
   ngOnInit() {
       this.http.get('../assets/hike.geo.json').subscribe(response => {
       const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>response;
-      debugger
+      //debugger
       const coordinates = data.features[0].geometry!.coordinates;
       //data.features[0].geometry!.coordinates = [coordinates[0]];
       data.features[0].geometry!.coordinates = coordinates;
       this.coord = coordinates[0];
       this.feature.geometry!.coordinates = coordinates[0];
       this.data = data;
-      this.center = [145.07416155, -37.8844967];//coordinates[0];
-      this.zoom = [14];
+      this.center = [145.180533, -37.952297];//coordinates[0];
+      this.zoom = [10];
       this.pitch = 30;
       this.showMarker = true;
       let i = 0;
       this.timer = window.setInterval(() => {
         if (i < coordinates.length-1) {
-         // this.center = coordinates[i];
+          this.center = coordinates[i];
          // data.features[0].geometry!.coordinates.push(coordinates[i]);
          if(i<coordinates.length){
           this.rotateMarker["-ms-transform"] = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1])+'deg)';
@@ -100,7 +100,6 @@ export class PatrolTrackerComponent implements OnInit {
           this.rotateMarker = Object.assign({},this.rotateMarker);
           this.feature.geometry!.coordinates = coordinates[i];
           this.feature = Object.assign({}, this.feature);
-          this.destfeature = Object.assign({}, this.feature);
          }
           this.coord = coordinates[i];
           this.data = { ...this.data };

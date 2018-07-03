@@ -1,24 +1,24 @@
-<section class="mapContent"  *ngIf="!isDetailedView">
-    <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true" [pitch]="pitch"
-        movingMethod="jumpTo">
+<section class="mapContent" *ngIf="!isDetailedView">
+    <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true"
+        [pitch]="pitch" movingMethod="jumpTo">
         <!-- [lngLat]="coord" -->
         <!-- <mgl-marker id="cat" *ngIf="showMarker" [feature]="feature">
         
         <div (click)="alert('Foo')" class="marker"  [ngStyle]="rotateMarker" style="background-image: url(../assets/images/car.png);">
         </div>
         </mgl-marker> -->
-        <mgl-marker id="dest" *ngIf="showMarker" [feature]="sourcefeature">
-        
-            <div (click)="alert('Foo')" class="markersource"  [ngStyle]="rotateMarker">
+        <mgl-marker id="dest" *ngIf="showMarker" [feature]="destfeature">
+
+            <div (click)="alert('Foo')" class="markersource" style="background-image: url(../assets/images/descmarker.png);">
             </div>
-            </mgl-marker>
+        </mgl-marker>
         <mgl-marker id="source" *ngIf="showMarker" [feature]="feature">
-    
-            <div  class="marker"  [ngStyle]="rotateMarker"  style="background-image: url(../assets/images/car.png);">
+
+            <div class="marker" [ngStyle]="rotateMarker" style="background-image: url(../assets/images/car.png);">
             </div>
-            </mgl-marker>
-    
-    
+        </mgl-marker>
+
+
         <mgl-geojson-source *ngIf="data" id="trace" [data]="data">
         </mgl-geojson-source>
         <mgl-layer *ngIf="data" id="trace" type="line" source="trace" [paint]="{
@@ -28,12 +28,10 @@
         }">
         </mgl-layer>
     </mgl-map>
-    </section>
-    <div class="footer"  *ngIf="!isDetailedView" (click)="openBottomSheet()">
-        <p> 
-            Estimates Travel Time :?
-                <span class="footerDiv" style="float:right">23 min</span>
-            </p>
-    </div>
-  
-    
+</section>
+<div class="footer" *ngIf="!isDetailedView" (click)="openBottomSheet()">
+    <p>
+        Estimates Travel Time :?
+        <span class="footerDiv" style="float:right">23 min</span>
+    </p>
+</div>
