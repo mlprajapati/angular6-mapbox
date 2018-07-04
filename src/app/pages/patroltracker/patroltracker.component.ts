@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LngLatLike } from 'mapbox-gl';
+import { LngLatLike, MapMouseEvent } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet } from '@angular/material';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
@@ -32,8 +32,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   destfeature: any ={
     'type': 'Feature',
     'properties': {
-      'message': 'Foo',
-      'iconSize': [60, 60]
+      'description': 'Foo'
     },
     'geometry': {
       'type': 'Point',
@@ -45,7 +44,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   sourcefeature: any ={
     'type': 'Feature',
     'properties': {
-      'message': 'Foo',
+      'description': 'Foo',
       'iconSize': [60, 60]
     },
     'geometry': {
@@ -58,7 +57,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   feature: any = {
     'type': 'Feature',
     'properties': {
-      'message': 'Foo',
+      'description': 'Foo',
       'iconSize': [60, 60]
     },
     'geometry': {
@@ -75,6 +74,8 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     };
     estimatedTime:number=0;
     estimatedDistance:number=0;
+    selectedPoint: boolean=false;
+    cursorStyle: string;
   alert(message: string) {
     alert(message);
   }
@@ -117,7 +118,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
       let i = 0;
       this.timer = window.setInterval(() => {
         if (i < coordinates.length-1) {
-          this.center = coordinates[i];
+          //this.center = coordinates[i];
          // data.features[0].geometry!.coordinates.push(coordinates[i]);
          if(i<coordinates.length){
           this.rotateMarker["-ms-transform"] = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1])+'deg)';
@@ -166,6 +167,14 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   //Detail view
    openDetails () {
     this.isDetailedView = true;
+  }
+  onClick(detail:any) {
+    console.log("-----> ",detail);
+    this.selectedPoint = true;
+  }
+  popupClose() {
+    
+    this.selectedPoint = false;
   }
   
   ngOnDestroy() {
