@@ -77,10 +77,12 @@ export class PatrolTrackerComponent implements OnInit {
   ngOnInit() {
       this.http.get('../assets/hike.geo.json').subscribe(response => {
       const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>response;
-      //debugger
-      const coordinates = data.features[0].geometry!.coordinates;
+      
+     // const coordinates = data.features[0].geometry!.coordinates;
       //data.features[0].geometry!.coordinates = [coordinates[0]];
-      data.features[0].geometry!.coordinates = coordinates;
+      let tempData: any = data.features[0];
+      const coordinates= this.clacPatrolCoords(tempData.legs[0].steps);
+     // data.features[0].geometry!.coordinates = coordinates;
       this.coord = coordinates[0];
       this.feature.geometry!.coordinates = coordinates[0];
       this.data = data;
@@ -98,18 +100,32 @@ export class PatrolTrackerComponent implements OnInit {
           this.rotateMarker["-webkit-transform"] = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1])+'deg)';
           this.rotateMarker.transform = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1],)+'deg)';
           this.rotateMarker = Object.assign({},this.rotateMarker);
+          
           this.feature.geometry!.coordinates = coordinates[i];
           this.feature = Object.assign({}, this.feature);
          }
           this.coord = coordinates[i];
-          this.data = { ...this.data };
+          //this.data = { ...this.data };
           i++;
         } else {
           window.clearInterval(this.timer);
           //this.showMarker = false;
         }
-      }, 1000);
+      }, 100);
     });
+  }
+  private clacPatrolCoords(co){
+    var coord = [];
+    co.forEach(element => {
+      coord.push(...element.geometry.coordinates);
+    });
+    var b = coord.filter(function(item, pos, arr){
+      // Always keep the 0th element as there is nothing before it
+      // Then check if each element is different than the one before it
+      return pos === 0 || item !== arr[pos-1];
+    });
+    
+    return b;
   }
   private calculateAngel(lat1:number,lon1:number){
     var angle =0
