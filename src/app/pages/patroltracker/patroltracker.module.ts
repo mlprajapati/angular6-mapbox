@@ -6,6 +6,8 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
 import { SharedModule } from '../../shared/shared.module';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
+import { environment } from '../../../environments/environment';
+import { PatrolTrackerService } from './patroltracker.service';
 
 
 
@@ -13,7 +15,7 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
   imports: [
     routing,CommonModule,MatBottomSheetModule,
     NgxMapboxGLModule.forRoot({
-      accessToken: 'pk.eyJ1Ijoid3lra3NzIiwiYSI6ImNqMjR6aTdmdzAwNHMzMnBvbjBucjlqNm8ifQ.6GjGpofWBVaIuSnhdXQb5w'
+      accessToken: environment.accessTokenMapbox
     }),
     SharedModule
   ],
@@ -21,7 +23,7 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
     PatrolTrackerComponent,
     JobdetailComponent
   ],
-  providers: [MatBottomSheet],
+  providers: [MatBottomSheet,PatrolTrackerService],
   entryComponents: [PatrolTrackerComponent, JobdetailComponent]
 })
 export class PatrolTrackerModule { }

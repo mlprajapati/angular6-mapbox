@@ -3,13 +3,17 @@ import { LngLatLike } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet } from '@angular/material';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
+import { Router } from '@angular/router';
+import { PatrolTrackerService } from './patroltracker.service';
+import { Langlat } from '../langlat';
+import { FeatureCollection } from '@turf/helpers';
 
 @Component({
   selector: 'patroltracker',
   templateUrl: './patroltracker.html',
   styleUrls: ['./patroltracker.css']
 })
-export class PatrolTrackerComponent implements OnInit {
+export class PatrolTrackerComponent implements OnInit,OnDestroy {
 
   data: GeoJSON.FeatureCollection<GeoJSON.LineString>;
   center: LngLatLike;
@@ -64,21 +68,33 @@ export class PatrolTrackerComponent implements OnInit {
         0
       ]
     }
-  }
+  };
+  featureCollection:FeatureCollection ={
+    "type": "FeatureCollection",
+    "features": []
+    };
+    estimatedTime:number=0;
+    estimatedDistance:number=0;
   alert(message: string) {
     alert(message);
   }
-  constructor(public http: HttpClient,public bottomSheet: MatBottomSheet) {
+  constructor(private router: Router,public http: HttpClient,public bottomSheet: MatBottomSheet,private patrolservice:PatrolTrackerService) {
     
    }
    openBottomSheet(): void {
     this.bottomSheet.open(JobdetailComponent);
   }
   ngOnInit() {
-      this.http.get('../assets/hike.geo.json').subscribe(response => {
-      const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>response;
-      
-     // const coordinates = data.features[0].geometry!.coordinates;
+    var longLat:Langlat={startLang:145.180533,startLat:-37.952297,endLang:144.959936,endLat:-37.815563};
+    
+    this.patrolservice.getDirectionRoute(longLat).subscribe(response => {
+      this.estimatedTime = (response.routes[0].duration)/60;
+      this.estimatedDistance = response.routes[0].distance;
+      this.sourcefeature.geometry.coordinates=[longLat.startLang,longLat.startLat]
+      this.featureCollection.features=response.routes;
+      const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>this.featureCollection;
+      //debugger
+      //const coordinates = data.features[0].geometry!.coordinates;
       //data.features[0].geometry!.coordinates = [coordinates[0]];
       let tempData: any = data.features[0];
       const coordinates= this.clacPatrolCoords(tempData.legs[0].steps);
@@ -86,7 +102,7 @@ export class PatrolTrackerComponent implements OnInit {
       this.coord = coordinates[0];
       this.feature.geometry!.coordinates = coordinates[0];
       this.data = data;
-      this.center = [145.180533, -37.952297];//coordinates[0];
+      this.center = [longLat.startLang, longLat.startLat];//coordinates[0];
       this.zoom = [10];
       this.pitch = 30;
       this.showMarker = true;
@@ -110,6 +126,7 @@ export class PatrolTrackerComponent implements OnInit {
         } else {
           window.clearInterval(this.timer);
           //this.showMarker = false;
+          this.router.navigate(['./pages/feedback']);
         }
       }, 100);
     });
