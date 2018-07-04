@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { MatBottomSheet } from '@angular/material';
-import { GreetingsComponent } from './greetings/greetings.component';
 import {MatSnackBar} from '@angular/material';
+import { Router } from "@angular/router";
+import { PatrolTrackerService } from "../patroltracker/patroltracker.service";
 @Component({
   selector: "app-feedback",
   templateUrl: "./feedback.component.html",
@@ -10,7 +11,10 @@ import {MatSnackBar} from '@angular/material';
 export class FeedbackComponent implements OnInit {
   //matButtonToggleGroup:any = 'yes';
   enableTextArea:boolean = false;
-  constructor(public bottomSheet: MatBottomSheet,public snackBar: MatSnackBar) {}
+  constructor(private patrolService:PatrolTrackerService,
+     public bottomSheet: MatBottomSheet,
+     public snackBar: MatSnackBar,
+     private router: Router) {}
 
   ngOnInit() {}
   textAreaToggler(param){
@@ -21,14 +25,17 @@ export class FeedbackComponent implements OnInit {
   } 
 
   openBottomSheet(): void {
-    this.bottomSheet.open(GreetingsComponent);
-    localStorage.removeItem("patrolservice");
+    //this.bottomSheet.open(GreetingsComponent);
+    this.patrolService.sendFeedback(null).subscribe(data=>{
+      console.log("--------->",data);
+      this.router.navigate(['./pages/greetings']);
+    });
+    
   }
-  openSnackBar() {
+/*   openSnackBar() {
     this.snackBar.openFromComponent(GreetingsComponent, {
       duration: 1000,
     });
-    localStorage.removeItem("patrolservice");
-  }
+  } */
   
 }

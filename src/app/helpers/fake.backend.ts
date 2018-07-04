@@ -9,10 +9,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     constructor() { }
  
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let petrolservice: any[] = JSON.parse(localStorage.getItem('patrolservice')) || [];
+        let patrolservice: any[] = JSON.parse(localStorage.getItem('patrolservice')) || [];
         return of(null).pipe(mergeMap(() => {
             if (request.url.endsWith('/api/tokenauthenticate') && request.method === 'POST') {
-                let filteredPs = petrolservice.filter(ps => {
+                let filteredPs = patrolservice.filter(ps => {
                     return ps.token === request.body.tocken;
                 });
                 if (filteredPs.length) {
@@ -29,7 +29,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
  
             if (request.url.endsWith('/api/patroledetail') && request.method === 'GET') {
                 if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
-                    return of(new HttpResponse({ status: 200, body: petrolservice }));
+                    return of(new HttpResponse({ status: 200, body: patrolservice }));
+                } else {
+                    return throwError('Unauthorised');
+                }
+            }
+            if (request.url.endsWith('/api/feedback') && request.method === 'POST') {
+                if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
+                    return of(new HttpResponse({ status: 200, body: patrolservice }));
                 } else {
                     return throwError('Unauthorised');
                 }

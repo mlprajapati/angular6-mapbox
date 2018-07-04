@@ -21,5 +21,8 @@ export class PatrolTrackerService {
         localStorage.removeItem("patrolservice");
         return 0;
     }
+    sendFeedback(formData:any){
+        return this.http.post('api/feedback',formData);
+    }
 
 }

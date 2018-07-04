@@ -96,7 +96,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     var longLat:Langlat={startLang:145.180533,startLat:-37.952297,endLang:144.959936,endLat:-37.815563};
     
     this.patrolservice.getDirectionRoute(longLat).subscribe(response => {
-      this.estimatedTime = (response.routes[0].duration)/60;
+      this.estimatedTime = Math.round((response.routes[0].duration)/60);
       this.estimatedDistance = response.routes[0].distance;
       this.sourcefeature.geometry.coordinates=[longLat.startLang,longLat.startLat]
       this.featureCollection.features=response.routes;
