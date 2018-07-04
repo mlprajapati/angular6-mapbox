@@ -91,7 +91,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   
   ngOnInit() {
     if(this.patrolservice.validateLink(this.activeRoute.snapshot.params.jobid)==1){
-     localStorage.setItem("patrolservice",JSON.stringify({"jobid":this.activeRoute.snapshot.params.jobid,"token":this.activeRoute.snapshot.params.jobid}));
+      sessionStorage.setItem("patrolservice",JSON.stringify({"jobid":this.activeRoute.snapshot.params.jobid,"token":this.activeRoute.snapshot.params.jobid}));
     
     var longLat:Langlat={startLang:145.180533,startLat:-37.952297,endLang:144.959936,endLat:-37.815563};
     

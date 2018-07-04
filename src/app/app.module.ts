@@ -12,6 +12,7 @@ import { TimingInterceptor } from './shared/timing.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { PatrolTrackerService } from './pages/patroltracker/patroltracker.service';
 import { AuthGuard } from './guards/auth.guard';
+import { fakeBackendProvider } from './helpers/fake.backend';
 @NgModule({
   declarations: [
     AppComponent
@@ -34,7 +35,7 @@ import { AuthGuard } from './guards/auth.guard';
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
-  }],
+  },fakeBackendProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

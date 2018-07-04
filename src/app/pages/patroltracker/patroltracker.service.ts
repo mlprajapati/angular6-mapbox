@@ -18,11 +18,11 @@ export class PatrolTrackerService {
         if(params){
             return 1;
         }
-        localStorage.removeItem("patrolservice");
+        sessionStorage.removeItem("patrolservice");
         return 0;
     }
     sendFeedback(formData:any){
-        return this.http.post('api/feedback',formData);
+        return this.http.post<any>('/api/feedback',formData);
     }
 
 }

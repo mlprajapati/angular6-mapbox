@@ -26,7 +26,7 @@ export class FeedbackComponent implements OnInit {
 
   openBottomSheet(): void {
     //this.bottomSheet.open(GreetingsComponent);
-    this.patrolService.sendFeedback(null).subscribe(data=>{
+    this.patrolService.sendFeedback({}).subscribe(data=>{
       console.log("--------->",data);
       this.router.navigate(['./pages/greetings']);
     });

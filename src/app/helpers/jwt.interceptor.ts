@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let currentPS = JSON.parse(localStorage.getItem('patrolservice'));
+        let currentPS = JSON.parse(sessionStorage.getItem('patrolservice'));
         if (currentPS && currentPS.token) {
             request = request.clone({
                 setHeaders: { 

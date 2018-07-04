@@ -11,7 +11,7 @@ export class GreetingsComponent implements OnInit{
 
   constructor() { }
 ngOnInit(){
-  localStorage.removeItem("patrolservice");
+  sessionStorage.removeItem("patrolservice");
 }
   /* goBack(event: MouseEvent):void{
     this.bottomSheetRef.dismiss();
