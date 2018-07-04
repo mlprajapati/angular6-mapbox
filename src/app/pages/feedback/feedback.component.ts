@@ -22,11 +22,13 @@ export class FeedbackComponent implements OnInit {
 
   openBottomSheet(): void {
     this.bottomSheet.open(GreetingsComponent);
+    localStorage.removeItem("patrolservice");
   }
   openSnackBar() {
     this.snackBar.openFromComponent(GreetingsComponent, {
       duration: 1000,
     });
+    localStorage.removeItem("patrolservice");
   }
   
 }

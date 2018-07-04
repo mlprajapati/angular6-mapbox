@@ -3,7 +3,7 @@ import { LngLatLike } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet } from '@angular/material';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { PatrolTrackerService } from './patroltracker.service';
 import { Langlat } from '../langlat';
 import { FeatureCollection } from '@turf/helpers';
@@ -78,13 +78,21 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   alert(message: string) {
     alert(message);
   }
-  constructor(private router: Router,public http: HttpClient,public bottomSheet: MatBottomSheet,private patrolservice:PatrolTrackerService) {
+  constructor(private activeRoute: ActivatedRoute,
+    private router: Router,
+    public http: HttpClient,
+    public bottomSheet: MatBottomSheet,
+    private patrolservice:PatrolTrackerService) {
     
    }
    openBottomSheet(): void {
     this.bottomSheet.open(JobdetailComponent);
   }
+  
   ngOnInit() {
+    if(this.patrolservice.validateLink(this.activeRoute.snapshot.params.jobid)==1){
+     localStorage.setItem("patrolservice",JSON.stringify({"jobid":this.activeRoute.snapshot.params.jobid,"token":this.activeRoute.snapshot.params.jobid}));
+    
     var longLat:Langlat={startLang:145.180533,startLat:-37.952297,endLang:144.959936,endLat:-37.815563};
     
     this.patrolservice.getDirectionRoute(longLat).subscribe(response => {
@@ -130,6 +138,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
         }
       }, 100);
     });
+  }
   }
   private clacPatrolCoords(co){
     var coord = [];

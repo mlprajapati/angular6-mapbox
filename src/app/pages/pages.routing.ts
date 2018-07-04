@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { Pages } from './pages.component';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from '../guards/auth.guard';
 
 // noinspection TypeScriptValidateTypes
 
@@ -16,9 +17,9 @@ export const routes: Routes = [
       },
       { path: '',  loadChildren: './home/home.module#HomeModule'
       },
-      { path: 'patroltracker',  loadChildren:'./patroltracker/patroltracker.module#PatrolTrackerModule'
+      { path: 'patroltracker/:jobid',  loadChildren:'./patroltracker/patroltracker.module#PatrolTrackerModule'
       },
-      { path: 'feedback',  loadChildren:'./feedback/feedback.module#FeedbackModule'
+      { path: 'feedback',  loadChildren:'./feedback/feedback.module#FeedbackModule',canActivate:[AuthGuard]
       }
 
     ]
