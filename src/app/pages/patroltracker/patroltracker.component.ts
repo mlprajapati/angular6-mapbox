@@ -7,6 +7,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PatrolTrackerService } from './patroltracker.service';
 import { Langlat } from '../langlat';
 import { FeatureCollection } from '@turf/helpers';
+import { interval, Subscription, } from 'rxjs';
+import { animationFrameScheduler } from 'rxjs';
+
 
 @Component({
   selector: 'patroltracker',
@@ -27,7 +30,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     '-webkit-transform': 'rotate(-20deg)',
     'transform': 'rotate(-20deg)'
   }
-  private timer: number;
+  private timer: Subscription;
   isDetailedView: boolean = false;
   destfeature: any ={
     'type': 'Feature',
@@ -116,14 +119,15 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
       this.pitch = 30;
       this.showMarker = true;
       let i = 0;
-      this.timer = window.setInterval(() => {
+      this.timer = interval(100, animationFrameScheduler).subscribe(() => {
         if (i < coordinates.length-1) {
           //this.center = coordinates[i];
          // data.features[0].geometry!.coordinates.push(coordinates[i]);
          if(i<coordinates.length){
-          this.rotateMarker["-ms-transform"] = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1])+'deg)';
-          this.rotateMarker["-webkit-transform"] = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1])+'deg)';
-          this.rotateMarker.transform = 'rotate('+this.calculateAngel(coordinates[i][0],coordinates[i][1],)+'deg)';
+           var angel:string = this.trunBasedOnBearing(tempData.legs[0].steps,coordinates[i]);
+          this.rotateMarker["-ms-transform"] = angel;
+          this.rotateMarker["-webkit-transform"] = angel;
+          this.rotateMarker.transform = angel;
           this.rotateMarker = Object.assign({},this.rotateMarker);
           
           this.feature.geometry!.coordinates = coordinates[i];
@@ -133,11 +137,12 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
           //this.data = { ...this.data };
           i++;
         } else {
-          window.clearInterval(this.timer);
+          //window.clearInterval(this.timer);
+          this.timer.unsubscribe();
           //this.showMarker = false;
           this.router.navigate(['./pages/feedback']);
         }
-      }, 100);
+      });
     });
   }
   }
@@ -164,6 +169,18 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
      }
      return angle;
   }
+  angle:string ='rotate(0deg)';
+  trunBasedOnBearing(co,currentCoord){
+    
+    co.forEach(element => {
+      if(element.maneuver.location[0] == currentCoord[0] && element.maneuver.location[1]== currentCoord[1]){
+        this.angle = 'rotate('+element.maneuver.bearing_after+'deg)';
+        return this.angle;
+      }
+    });
+      
+    return this.angle;
+  }
   //Detail view
    openDetails () {
     this.isDetailedView = true;
@@ -178,7 +195,8 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   }
   
   ngOnDestroy() {
-    window.clearInterval(this.timer);
+    //window.clearInterval(this.timer);
+    this.timer.unsubscribe();
   }
 }
 
