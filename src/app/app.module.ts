@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GlobalState } from './global.state';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AppRoutingModule } from './app.routing';
@@ -13,6 +13,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { PatrolTrackerService } from './pages/patroltracker/patroltracker.service';
 import { AuthGuard } from './guards/auth.guard';
 import { fakeBackendProvider } from './helpers/fake.backend';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -25,6 +26,7 @@ import { fakeBackendProvider } from './helpers/fake.backend';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    ReactiveFormsModule
    
   ],
   providers: [AuthGuard,GlobalState,

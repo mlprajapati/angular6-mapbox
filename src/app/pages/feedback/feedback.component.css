@@ -52,4 +52,15 @@ textarea{
     height:40vh;
     border: 2px solid #cccccc;
 }
-
+.alert {
+  background: #f4363669;
+  padding: 7px;
+  font-size: .9em;
+  margin-bottom: 20px;
+  display: inline-block;
+  animation: 2s alertAnim forwards;
+  color:red;
+}
+.example-pizza-party {
+  color: hotpink;
+}
