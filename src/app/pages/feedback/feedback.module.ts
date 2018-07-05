@@ -4,12 +4,12 @@ import { FeedbackComponent } from './feedback.component';
 import { FeedbackRoutingModule } from './feedback.routing';
 import { SharedModule } from '../../shared/shared.module';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PatrolTrackerService } from '../patroltracker/patroltracker.service';
 
 @NgModule({
   imports: [
-    CommonModule,FeedbackRoutingModule,SharedModule,FormsModule,MatBottomSheetModule
+    CommonModule,FeedbackRoutingModule,SharedModule,FormsModule,MatBottomSheetModule,ReactiveFormsModule
   ],
   declarations: [
     FeedbackComponent
