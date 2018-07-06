@@ -28,7 +28,9 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   rotateMarker = {
     '-ms-transform': 'rotate(-20deg)',
     '-webkit-transform': 'rotate(-20deg)',
-    'transform': 'rotate(-20deg)'
+    'transform': 'rotate(-20deg)',
+    //'transition': 'transform 1s',
+    'transition-timing-function':'ease'
   }
   private timer: Subscription;
   isDetailedView: boolean = false;
@@ -100,6 +102,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     var longLat:Langlat={startLang:145.180533,startLat:-37.952297,endLang:144.959936,endLat:-37.815563};
     
     this.patrolservice.getDirectionRoute(longLat).subscribe(response => {
+      //debugger
       this.estimatedTime = Math.round((response.routes[0].duration)/60);
       this.estimatedDistance = response.routes[0].distance;
       this.sourcefeature.geometry.coordinates=[longLat.startLang,longLat.startLat]
@@ -115,19 +118,20 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
       this.feature.geometry!.coordinates = coordinates[0];
       this.data = data;
       this.center = [longLat.startLang, longLat.startLat];//coordinates[0];
-      this.zoom = [10];
+      this.zoom = [15];
       this.pitch = 30;
       this.showMarker = true;
       let i = 0;
-      this.timer = interval(100, animationFrameScheduler).subscribe(() => {
+      this.timer = interval(1000, animationFrameScheduler).subscribe(() => {
         if (i < coordinates.length-1) {
-          //this.center = coordinates[i];
+          this.center = coordinates[i];
          // data.features[0].geometry!.coordinates.push(coordinates[i]);
          if(i<coordinates.length){
            var angel:string = this.trunBasedOnBearing(tempData.legs[0].steps,coordinates[i]);
           this.rotateMarker["-ms-transform"] = angel;
           this.rotateMarker["-webkit-transform"] = angel;
           this.rotateMarker.transform = angel;
+          this.rotateMarker['transition-timing-function'] = 'ease-in-out'
           this.rotateMarker = Object.assign({},this.rotateMarker);
           
           this.feature.geometry!.coordinates = coordinates[i];
@@ -170,13 +174,16 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
      return angle;
   }
   angle:string ='rotate(0deg)';
-  trunBasedOnBearing(co,currentCoord){
+  trunBasedOnBearing(steps,currentCoord){
     
-    co.forEach(element => {
-      if(element.maneuver.location[0] == currentCoord[0] && element.maneuver.location[1]== currentCoord[1]){
-        this.angle = 'rotate('+element.maneuver.bearing_after+'deg)';
-        return this.angle;
-      }
+    steps.forEach(element => {
+      element.intersections.forEach(item=>{
+        if(item.location[0] == currentCoord[0] && item.location[1]== currentCoord[1] && item.entry){
+          this.angle = 'rotate('+(item.bearings[0])+'deg)';
+          return this.angle;
+        }
+      });
+     
     });
       
     return this.angle;
