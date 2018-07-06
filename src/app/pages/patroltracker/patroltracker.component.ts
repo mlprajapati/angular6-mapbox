@@ -25,6 +25,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   coord: LngLatLike;
   showMarker: boolean = false;
   initialAngel:number=0;
+  index = -1;
   rotateMarker = {
     '-ms-transform': 'rotate(-20deg)',
     '-webkit-transform': 'rotate(-20deg)',
@@ -33,6 +34,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     'transition-timing-function':'ease'
   }
   private timer: Subscription;
+  private timerMarker: Subscription;
   isDetailedView: boolean = false;
   destfeature: any ={
     'type': 'Feature',
@@ -94,103 +96,108 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
    openBottomSheet(): void {
     this.bottomSheet.open(JobdetailComponent);
   }
-  
+  intter:number=100;
   ngOnInit() {
     if(this.patrolservice.validateLink(this.activeRoute.snapshot.params.jobid)==1){
-      sessionStorage.setItem("patrolservice",JSON.stringify({"jobid":this.activeRoute.snapshot.params.jobid,"token":this.activeRoute.snapshot.params.jobid}));
-    
-    var longLat:Langlat={startLang:145.180533,startLat:-37.952297,endLang:144.959936,endLat:-37.815563};
-    
-    this.patrolservice.getDirectionRoute(longLat).subscribe(response => {
-      //debugger
-      this.estimatedTime = Math.round((response.routes[0].duration)/60);
-      this.estimatedDistance = response.routes[0].distance;
-      this.sourcefeature.geometry.coordinates=[longLat.startLang,longLat.startLat]
-      this.featureCollection.features=response.routes;
-      const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>this.featureCollection;
-      //debugger
-      //const coordinates = data.features[0].geometry!.coordinates;
-      //data.features[0].geometry!.coordinates = [coordinates[0]];
-      let tempData: any = data.features[0];
-      const coordinates= this.clacPatrolCoords(tempData.legs[0].steps);
-     // data.features[0].geometry!.coordinates = coordinates;
-      this.coord = coordinates[0];
-      this.feature.geometry!.coordinates = coordinates[0];
-      this.data = data;
-      this.center = [longLat.startLang, longLat.startLat];//coordinates[0];
-      this.zoom = [15];
-      this.pitch = 30;
-      this.showMarker = true;
-      let i = 0;
-      this.timer = interval(1000, animationFrameScheduler).subscribe(() => {
-        if (i < coordinates.length-1) {
-          this.center = coordinates[i];
-         // data.features[0].geometry!.coordinates.push(coordinates[i]);
-         if(i<coordinates.length){
-           var angel:string = this.trunBasedOnBearing(tempData.legs[0].steps,coordinates[i]);
-          this.rotateMarker["-ms-transform"] = angel;
-          this.rotateMarker["-webkit-transform"] = angel;
-          this.rotateMarker.transform = angel;
-          this.rotateMarker['transition-timing-function'] = 'ease-in-out'
-          this.rotateMarker = Object.assign({},this.rotateMarker);
-          
-          this.feature.geometry!.coordinates = coordinates[i];
-          this.feature = Object.assign({}, this.feature);
-         }
-          this.coord = coordinates[i];
-          //this.data = { ...this.data };
-          i++;
-        } else {
-          //window.clearInterval(this.timer);
-          this.timer.unsubscribe();
-          //this.showMarker = false;
-          this.router.navigate(['./pages/feedback']);
-        }
-      });
-    });
+      this.storeToken();
+      var longLat:Langlat={startLang:145.180533,startLat:-37.952297,endLang:144.959936,endLat:-37.815563};
+      this.patrolservice.getBreakDownDetails(this.activeRoute.snapshot.params.jobid).subscribe(data=>{
+        longLat.endLang = data.longitude;
+        longLat.endLat = data.latitude;
+        this.patrolservice.getPatrolLocation(this.index).subscribe(pdata=>{
+          longLat.startLang = pdata.longitude;
+          longLat.startLat = pdata.latitude;
+          this.patrolservice.getDirectionRoute(longLat).subscribe(response => {
+            this.estimatedTime = Math.round((response.routes[0].duration)/60);
+            this.estimatedDistance = response.routes[0].distance;
+            this.sourcefeature.geometry.coordinates=[longLat.startLang,longLat.startLat]
+            this.featureCollection.features=response.routes;
+            const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>this.featureCollection;
+            //debugger
+            //const coordinates = data.features[0].geometry!.coordinates;
+            //data.features[0].geometry!.coordinates = [coordinates[0]];
+            let tempData: any = data.features[0];
+            const coordinates= data.features[0].geometry.coordinates;//this.clacPatrolCoords(tempData.legs[0].steps);
+            // data.features[0].geometry!.coordinates = coordinates;
+            //this.coord = coordinates[0];
+            this.feature.geometry!.coordinates = coordinates[0];
+            this.data = data;
+            this.center = [longLat.startLang, longLat.startLat];//coordinates[0];
+            this.zoom = [15];
+            this.pitch = 30;
+            this.showMarker = true;
+            // let i = 0;
+            // this.index++;
+            const markerLangLat:Langlat={startLang:longLat.startLang,startLat:longLat.startLat,endLang:longLat.startLang,endLat:longLat.startLat};
+
+            this.timer = interval(6000, animationFrameScheduler).subscribe(() => {
+              let i = 0;
+              this.patrolservice.getPatrolLocation(this.index).subscribe(pdata=>{
+                this.index++;
+                if(pdata.longitude ==0 && pdata.latitude ==0){
+                  this.timer.unsubscribe();
+                  if(this.timerMarker){
+                    this.timerMarker.unsubscribe();
+                  }
+                 
+                  this.router.navigate(['./pages/feedback']);
+                } else {
+                  
+                  //if(this.index > 0)
+                  {
+                    markerLangLat.startLang = markerLangLat.endLang;
+                  markerLangLat.startLat = markerLangLat.endLat;
+                  markerLangLat.endLang = pdata.longitude;
+                  markerLangLat.endLat = pdata.latitude;
+                 
+                  // markerLangLat.endLang = markerLangLat.startLang;
+                  // markerLangLat.endLat = markerLangLat.startLat;
+                  // markerLangLat.startLang = pdata.longitude;
+                  // markerLangLat.startLat = pdata.latitude;
+                  }
+                  
+                  this.patrolservice.getDirectionRoute(markerLangLat).subscribe(response => {
+                   if(this.timerMarker){
+                    this.timerMarker.unsubscribe();
+                   }
+                    const coordinatesM=response.routes[0].geometry.coordinates;
+                    this.timerMarker = interval(1000, animationFrameScheduler).subscribe(() => {
+                      if (i < coordinatesM.length-1) {
+                        this.center = coordinatesM[i];
+                       // data.features[0].geometry!.coordinates.push(coordinates[i]);
+                       if(i<coordinatesM.length){
+                        var angel:string = this.trunBasedOnBearing(response.routes[0].legs[0].steps,coordinatesM[i]);
+                        this.rotateMarker["-ms-transform"] = angel;
+                        this.rotateMarker["-webkit-transform"] = angel;
+                        this.rotateMarker.transform = angel;
+                        this.rotateMarker['transition-timing-function'] = 'ease-in-out'
+                         this.rotateMarker = Object.assign({},this.rotateMarker);
+                        
+                        this.feature.geometry!.coordinates = coordinatesM[i];
+                        this.feature = Object.assign({}, this.feature);
+                       }
+                        //this.coord = coordinates[i];
+                        //this.data = { ...this.data };
+                        i++;
+                      } else {
+                        //window.clearInterval(this.timer);
+                        this.timerMarker.unsubscribe();
+                        //this.showMarker = false;
+                        //this.router.navigate(['./pages/feedback']);
+                      }
+                    });
+                  });
+                }
+              });
+            });
+          });
+        });
+      })
+    }
   }
-  }
-  private clacPatrolCoords(co){
-    var coord = [];
-    co.forEach(element => {
-      coord.push(...element.geometry.coordinates);
-    });
-    var b = coord.filter(function(item, pos, arr){
-      // Always keep the 0th element as there is nothing before it
-      // Then check if each element is different than the one before it
-      return pos === 0 || item !== arr[pos-1];
-    });
-    
-    return b;
-  }
-  private calculateAngel(lat1:number,lon1:number){
-    var angle =0
-    lat1 += Math.cos(this.initialAngel) / 100;
-    lon1 += Math.sin(this.initialAngel) / 100;
-    angle = this.initialAngel * (180 / Math.PI);
-     if (Math.random() > 0.95) {
-      this.initialAngel += (Math.random() - 0.5) / 2;
-     }
-     return angle;
-  }
-  angle:string ='rotate(0deg)';
-  trunBasedOnBearing(steps,currentCoord){
-    
-    steps.forEach(element => {
-      element.intersections.forEach(item=>{
-        if(item.location[0] == currentCoord[0] && item.location[1]== currentCoord[1] && item.entry){
-          this.angle = 'rotate('+(item.bearings[0])+'deg)';
-          return this.angle;
-        }
-      });
-     
-    });
-      
-    return this.angle;
-  }
-  //Detail view
-   openDetails () {
-    this.isDetailedView = true;
+
+  private storeToken(){
+    sessionStorage.setItem("patrolservice",JSON.stringify({"jobid":this.activeRoute.snapshot.params.jobid,"token":this.activeRoute.snapshot.params.jobid}));
   }
   onClick(detail:any) {
     console.log("-----> ",detail);
@@ -200,10 +207,32 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     
     this.selectedPoint = false;
   }
-  
+  angle:string ='rotate(0deg)';
+  trunBasedOnBearing(steps,currentCoord){
+    
+    // steps.forEach(element => {
+    //   element.intersections.forEach(item=>{
+    //     if(item.location[0] == currentCoord[0] && item.location[1]== currentCoord[1] && item.entry){
+    //       this.angle = 'rotate('+(item.bearings[0])+'deg)';
+    //       return this.angle;
+    //     }
+    //   });
+     
+   // });
+   steps.forEach(element=>{
+     if(element.maneuver.location[0] ==currentCoord[0] && element.maneuver.location[1] ==currentCoord[1])
+     {
+      this.angle = 'rotate('+(element.maneuver.bearing_after)+'deg)';
+      return this.angle;
+     }
+     
+   })
+   return this.angle;
+  }
   ngOnDestroy() {
     //window.clearInterval(this.timer);
     this.timer.unsubscribe();
+    this.timerMarker.unsubscribe();
   }
 }
 
