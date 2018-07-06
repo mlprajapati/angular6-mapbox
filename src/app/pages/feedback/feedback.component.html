@@ -1,5 +1,5 @@
-<form class="feedback-form" [formGroup]="contactForm" (ngSubmit)="openBottomSheet()">
-  <div class="content" fxLayout="row" fxLayoutAlign="center" formGroupName="personalData">
+<form class="feedback-form" [formGroup]="rForm" (ngSubmit)="openBottomSheet(rForm.value)">
+  <div class="content" fxLayout="row" fxLayoutAlign="center">
     <mat-card class="feedback-card" fxFlex="90%" fxFlex.gt-md="60%" fxFlex.gt-sm="90%">
       <mat-card-content>
         <div class="gap">
@@ -9,7 +9,7 @@
         <div class="gap50">Did you like using 'Track my patrol' feature?</div>
 
         <div fxLayout="row" fxLayoutAlign="center" class="gap">
-          <mat-button-toggle-group fxFlex="90%" fxFlex.gt-md="50%" fxFlex.gt-xs="40%" #group="matButtonToggleGroup" (change)="textAreaToggler(group.value)">
+          <mat-button-toggle-group fxFlex="90%" fxFlex.gt-md="50%" fxFlex.gt-xs="40%" #group="matButtonToggleGroup" formControlName="togglerValue" (change)="textAreaToggler(group.value)">
             <mat-button-toggle value="yes" [checked]="true" fxFlex="100%" fxLayoutAlign="center">
               <b>Yes</b>
             </mat-button-toggle>
@@ -24,7 +24,8 @@
             <!-- <textarea class="gap10" placeholder="Leave a comment" [(ngModel)]="textArea" name="commentsArea"></textarea> -->
             <textarea class="gap10" placeholder="Leave a comment" formControlName="comment"></textarea>
           </div>
-          
+<!--           <div class="alert" *ngIf="!rForm.controls['comment'].valid && rForm.controls['comment'].touched">Please specify a comment.</div>
+ -->          
         </div>
       </mat-card-content>
     </mat-card>
@@ -34,6 +35,5 @@
     <button type="submit" mat-raised-button color="primary" fxFlex="90%" fxFlex.gt-md="50%" fxFlex.gt-xs="40%">Submit</button>
   </div>
 </form>
-<!-- <button mat-button (click)="openSnackBar()" aria-label="Show an example snack-bar">
-    Pizza party
-  </button> -->
+
+    
