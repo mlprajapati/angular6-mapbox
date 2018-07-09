@@ -30,7 +30,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     '-ms-transform': 'rotate(-20deg)',
     '-webkit-transform': 'rotate(-20deg)',
     'transform': 'rotate(-20deg)',
-    //'transition': 'transform 1s',
+    'transition': 'transform 1s',
     'transition-timing-function':'ease'
   }
   private timer: Subscription;
