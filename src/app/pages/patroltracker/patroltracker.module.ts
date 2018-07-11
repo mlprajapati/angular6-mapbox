@@ -8,6 +8,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
 import { environment } from '../../../environments/environment';
 import { PatrolTrackerService } from './patroltracker.service';
+import { PolyLineService } from './polyline.service';
+
 
 
 
@@ -23,7 +25,7 @@ import { PatrolTrackerService } from './patroltracker.service';
     PatrolTrackerComponent,
     JobdetailComponent
   ],
-  providers: [MatBottomSheet,PatrolTrackerService],
+  providers: [MatBottomSheet,PatrolTrackerService,PolyLineService],
   entryComponents: [PatrolTrackerComponent, JobdetailComponent]
 })
 export class PatrolTrackerModule { }

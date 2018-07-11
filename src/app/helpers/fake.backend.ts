@@ -10,7 +10,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
  
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let patrolservice: any[] = JSON.parse(sessionStorage.getItem('patrolservice')) || [];
-        let coords: any[] = JSON.parse(localStorage.getItem('coords')) || [];
+       
         return of(null).pipe(mergeMap(() => {
             if (request.url.endsWith('/api/tokenauthenticate') && request.method === 'POST') {
                 let filteredPs = patrolservice.filter(ps => {
@@ -74,7 +74,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 }
             }
             if (request.url.match(/\/api\/location\/\d+$/) && request.method === 'GET') {
-
+                let coords: any[] = JSON.parse(localStorage.getItem('coords')) || [];
                 if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
                     let urlParts = request.url.split('/');
                     let id = parseInt(urlParts[urlParts.length - 1]);
@@ -83,10 +83,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                         "longitude": 145.180533
                             } }));
                     }
-                    for(var i=0; i<coords['coordinates'].length;i++){
+                    for(var i=0; i<coords.length;i++){
                         if(i==id){
-                            return of(new HttpResponse({ status: 200, body: {"latitude": coords['coordinates'][i][1],
-                        "longitude": coords['coordinates'][i][0],
+                            return of(new HttpResponse({ status: 200, body: {"latitude": coords[i][1],
+                        "longitude": coords[i][0],
                             } }))
                         }
                     }
