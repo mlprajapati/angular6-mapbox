@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { LngLatLike, MapMouseEvent } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet } from '@angular/material';
@@ -10,7 +10,7 @@ import { FeatureCollection } from '@turf/helpers';
 import { interval, Subscription, } from 'rxjs';
 import { animationFrameScheduler } from 'rxjs';
 import { PolyLineService } from './polyline.service';
-
+declare var turf: any;
 
 @Component({
   selector: 'patroltracker',
@@ -91,7 +91,9 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
     private router: Router,
     public http: HttpClient,
     public bottomSheet: MatBottomSheet,
-    private patrolservice:PatrolTrackerService,private PolyLineService:PolyLineService) {
+    private patrolservice:PatrolTrackerService,
+    private PolyLineService:PolyLineService,
+    public ngZone: NgZone) {
     
    }
    openBottomSheet(): void {
@@ -199,7 +201,7 @@ export class PatrolTrackerComponent implements OnInit,OnDestroy {
   //     })
   //   }
   // }
-  currentMarkerCoord:any={};
+  //currentMarkerCoord:any={};
   // ngOnInit() {
   //   if(this.patrolservice.validateLink(this.activeRoute.snapshot.params.jobid)==1){
   //         this.storeToken();
@@ -352,6 +354,8 @@ options:any={};
             if(this.index == coords.length-1 || this.options.coords.startLang==0 || this.options.coords.startLat==0){
               //this.timer.unsubscribe();
               if(this.timerMarker){
+                this.counter = this.coords.length;
+                cancelAnimationFrame(this.handleId);
                 this.timerMarker.unsubscribe();
               }
              
@@ -369,12 +373,17 @@ options:any={};
     }
   }
   req:any;
+  req2:any;
+  coords:any=[];
+  handleId:any
+  counter:number = 0;
   createRoutes(longLat){
     if(this.req){
       this.req.unsubscribe();
     }
     
        this.req = this.patrolservice.getDirectionRoute(longLat).subscribe(response => {
+        this.counter = 0;
         // this.rotateMarker["visibility"] = "visible";
         // this.rotateMarker["opacity"] = "1";
         // this.rotateMarker["transition"]=" visibility 0s, opacity 0.5s linear";       
@@ -385,39 +394,58 @@ options:any={};
         this.featureCollection.features = response.routes;
         //debugger;
         const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>this.featureCollection;
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         const coordinates= data.features[0].geometry.coordinates;
-        // if(this.index==-1){
-        //   localStorage.setItem('coords',JSON.stringify(coordinates));
-        //   this.index++; 
-        // }
-        var angel:string = this.trunBasedOnBearing(response.routes[0].legs[0].steps,coordinates[0]);
+        this.coords = data.features[0].geometry.coordinates;
+        if(this.index==0){
+          localStorage.setItem('coords',JSON.stringify(coordinates));
+          //this.index++; 
+        }
+        var angel:string = this.trunBasedOnBearing2(data);//this.trunBasedOnBearing(response.routes[0].legs[0].steps,coordinates[0]);
         this.rotateMarker["-ms-transform"] = angel;
         this.rotateMarker["-webkit-transform"] = angel;
         this.rotateMarker.transform = angel;
         this.rotateMarker['transition-timing-function'] = 'ease-in-out'
         this.rotateMarker = Object.assign({},this.rotateMarker);
-        this.feature.geometry!.coordinates = coordinates[0];
-        this.feature = Object.assign({}, this.feature);
+        //point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter];
+        //this.feature.geometry!.coordinates = coordinates[counter];
+        
         this.data = Object.assign({},data);
         this.center = [longLat.startLang, longLat.startLat];//coordinates[0];
         this.showMarker = true;
         this.index++; 
-        let i = 0;
+        this.feature = JSON.parse(JSON.stringify(this.feature));
+        this.animate();
         var speed:number = Math.round((response.routes[0].duration));
-          this.patrolservice.getPatrolLocation(this.index).subscribe(pdata=>{
-            //this.index++;
-              //if(this.index > 0)
-              {
-                this.options.coords.startLang = pdata.longitude;
-                this.options.coords.startLat = pdata.latitude;
-                
-                this.createRoutes(this.options.coords);
-              }
+        if(this.req2){
+          this.req2.unsubscribe();
+        }
+        this.req2 = this.patrolservice.getPatrolLocation(this.index).subscribe(pdata=>{
+  
+          this.options.coords.startLang = pdata.longitude;
+          this.options.coords.startLat = pdata.latitude;
+          this.createRoutes(this.options.coords);
+             
           });
       });
   }
+  private animate() {
+    //point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter];
+    
+    if (this.counter < this.coords.length) {
+      this.ngZone.runOutsideAngular(() => {
+        this.feature.geometry!.coordinates = this.coords[this.counter];
+        this.handleId = requestAnimationFrame(() => {
+          
+          this.animate();
 
+        });
+  
+      });
+     
+    }
+    this.counter = this.counter + 1;
+  }
 
   private storeToken(){
     sessionStorage.setItem("patrolservice",JSON.stringify({"jobid":this.activeRoute.snapshot.params.jobid,"token":this.activeRoute.snapshot.params.jobid}));
@@ -449,8 +477,17 @@ options:any={};
       return this.angle;
      }
      
+     
    })
    return this.angle;
+  }
+  trunBasedOnBearing2(routes){
+  //  debugger
+    var angle = 'rotate('+(turf.bearing(
+      turf.point(routes.features[0].geometry.coordinates[this.counter]),
+      turf.point(routes.features[0].geometry.coordinates[this.counter+1])
+  ))+'deg)';
+  return angle;
   }
 
 
