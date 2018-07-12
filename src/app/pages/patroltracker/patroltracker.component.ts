@@ -168,7 +168,7 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
     if (this.counter < this.coords.length) {
       this.ngZone.runOutsideAngular(() => {
         this.feature.geometry!.coordinates = this.coords[this.counter];
-        this.changeDetectorRef.detectChanges();
+        //this.changeDetectorRef.detectChanges();
         this.handleId = requestAnimationFrame(() => {
           this.animate(timestamp);
         });
