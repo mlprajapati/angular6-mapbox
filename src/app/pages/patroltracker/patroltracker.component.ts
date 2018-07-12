@@ -9,6 +9,7 @@ import { FeatureCollection } from '@turf/helpers';
 import { interval, Subscription, } from 'rxjs';
 import { animationFrameScheduler } from 'rxjs';
 import { PolyLineService } from './polyline.service';
+import { parse } from 'url';
 declare var turf: any;
 
 @Component({
@@ -19,6 +20,19 @@ declare var turf: any;
 export class PatrolTrackerComponent implements OnInit, OnDestroy {
   private changeDetectorRef: ChangeDetectorRef;
   data: GeoJSON.FeatureCollection<GeoJSON.LineString>;
+  routes: any={
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [0,0],
+                [0,0]
+            ]
+        }
+    }]
+};
   center: LngLatLike;
   zoom = [0];
   pitch: number;
@@ -44,7 +58,7 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
     'transition': 'transform 1s',
     'transition-timing-function': 'ease'
   }
-  private timerMarker: Subscription;
+  timerMarker: Subscription;
   destfeature: any = {
     'type': 'Feature',
     'properties': {
@@ -84,6 +98,7 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
     private PolyLineService: PolyLineService,
     public ngZone: NgZone,changeDetectorRef: ChangeDetectorRef) {
       this.changeDetectorRef = changeDetectorRef;
+     
   }
   openBottomSheet(): void {
     this.bottomSheet.open(JobdetailComponent);
@@ -130,8 +145,25 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
       response.routes[0].geometry = this.PolyLineService.toGeoJSON(response.routes[0].geometry, 5);
       this.featureCollection.features = response.routes;
       const data: GeoJSON.FeatureCollection<GeoJSON.LineString> = <any>this.featureCollection;
+      const routes: any = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [0,0],
+                    [0,0]
+                ]
+            }
+        }]
+    };
+    
       const coordinates = data.features[0].geometry.coordinates;
       this.coords = data.features[0].geometry.coordinates;
+      routes.features[0].geometry.coordinates[0]=this.coords[0];
+      routes.features[0].geometry.coordinates[1]=this.coords[1];
+      this.routes = JSON.parse(JSON.stringify(routes));
       if (this.index == 0) {
         localStorage.setItem('coords', JSON.stringify(coordinates));
       }
@@ -145,8 +177,9 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
       this.showMarker = true;
       this.index++;
       this.feature = JSON.parse(JSON.stringify(this.feature));
-      this.animate(0);
-      if (this.req2) {
+      this.routePath();
+      
+      if(this.req2) {
         this.req2.unsubscribe();
       }
       this.req2 = this.patrolservice.getPatrolLocation(this.index).subscribe(pdata => {
@@ -156,27 +189,85 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
       });
     });
   }
+  animate() {
+    if (this.counter < this.coords.length) {
+      this.ngZone.runOutsideAngular(() => {
+        //this.feature.geometry!.coordinates = this.routes.features[0].geometry.coordinates[this.counter];
+        
+        //this.changeDetectorRef.detectChanges();
+        this.feature.geometry!.coordinates = this.coords[this.counter];
+       // this.handleId =  window.requestAnimFrame(()=>{this.animate();});
+      });
+    }
+    this.counter = this.counter + 1;
+  }
   private endRoute(){
     if (this.timerMarker) {
       this.counter = this.coords.length;
-      cancelAnimationFrame(this.handleId);
+      //cancelAnimationFrame(this.handleId);
       this.timerMarker.unsubscribe();
     }
     this.router.navigate(['./pages/feedback']);
   }
-  private animate(timestamp) {
-    if (this.counter < this.coords.length) {
-      this.ngZone.runOutsideAngular(() => {
-        this.feature.geometry!.coordinates = this.coords[this.counter];
-        //this.changeDetectorRef.detectChanges();
-        this.handleId = requestAnimationFrame(() => {
-          this.animate(timestamp);
-        });
 
+  timer:Subscription;
+  private routePath(){
+    
+    var lineDistance = turf.lineDistance(this.routes.features[0], 'kilometers');
+
+      let arc = [];
+
+      // Number of steps to use in the arc and animation, more steps means
+      // a smoother arc and animation, but too many steps will result in a
+      // low frame rate
+      var steps = 100;
+
+      // Draw an arc between the `origin` & `destination` of the two points
+      for (var i = 0; i < lineDistance; i += lineDistance / steps) {
+          var segment = turf.along(this.routes.features[0], i, 'kilometers');
+          arc.push(segment.geometry.coordinates);
+      }
+      // Update the route with calculated arc coordinates
+      this.routes.features[0].geometry.coordinates =[];
+      this.routes.features[0].geometry.coordinates = arc;
+      //this.routes = JSON.parse(JSON.stringify(this.routes));
+      var i=0;
+      if(this.timer){
+        this.timer.unsubscribe();
+      }
+      //debugger;
+      this.timer = interval(0, animationFrameScheduler).subscribe(() => {
+        if (i < this.routes.features[0].geometry.coordinates.length-1) {
+          if(i<this.routes.features[0].geometry.coordinates.length){
+           
+            const feature: any = {
+              'type': 'Feature',
+              'properties': {
+                'description': 'Foo',
+                'iconSize': [60, 60]
+              },
+              'geometry': {
+                'type': 'Point',
+                'coordinates': [
+                  0,
+                  0
+                ]
+              }
+            };
+            feature.geometry.coordinates = this.routes.features[0].geometry.coordinates[i];
+            this.feature = JSON.parse(JSON.stringify(feature));
+          }
+          i++;
+        }
+        else {
+              //window.clearInterval(this.timer);
+              this.timer.unsubscribe();
+              //this.showMarker = false;
+              //this.router.navigate(['./pages/feedback']);
+            }
+        
       });
-
-    }
-    this.counter = this.counter + 1;
+      //this.animate();
   }
   private storeToken() {
     sessionStorage.setItem("patrolservice", JSON.stringify({ "jobid": this.activeRoute.snapshot.params.jobid, "token": this.activeRoute.snapshot.params.jobid }));
@@ -193,7 +284,7 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
         this.angle = 'rotate(' + (element.maneuver.bearing_after) + 'deg)';
         return this.angle;
       }
-    })
+    });
     return this.angle;
   }
   private trunBasedOnBearing2(routes) {

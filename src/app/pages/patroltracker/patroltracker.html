@@ -18,9 +18,17 @@
 
         <mgl-geojson-source *ngIf="data" id="trace" [data]="data">
         </mgl-geojson-source>
+        <mgl-geojson-source *ngIf="routes" id="traceMarker" [data]="routes">
+        </mgl-geojson-source>
         <mgl-layer *ngIf="data" id="trace" type="line" source="trace" [paint]="{
             'line-color': 'blue',
             'line-opacity': 0.75,
+            'line-width': 7
+        }">
+        </mgl-layer>
+        <mgl-layer *ngIf="routes" id="traceMarker" type="line" source="traceMarker" [paint]="{
+            'line-color': 'gray',
+            'line-opacity': 0.3,
             'line-width': 7
         }">
         </mgl-layer>

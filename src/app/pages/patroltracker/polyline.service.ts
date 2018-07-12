@@ -112,8 +112,7 @@ fromGeoJSON(geojson, precision) {
     if (!geojson || geojson.type !== 'LineString') {
         throw new Error('Input must be a GeoJSON LineString');
     }
-    return 
-    this.encode(this.flipped(geojson.coordinates), precision);
+    return this.encode(this.flipped(geojson.coordinates), precision);
 }
 toGeoJSON (str, precision) {
     var coords = this.decode(str, precision);
