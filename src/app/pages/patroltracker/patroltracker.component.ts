@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { LngLatLike } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet, ICON_REGISTRY_PROVIDER_FACTORY } from '@angular/material';
@@ -13,12 +13,17 @@ import { log } from 'util';
 import { parse } from 'url';
 declare var turf: any;
 
+
 @Component({
   selector: 'patroltracker',
   templateUrl: './patroltracker.html',
   styleUrls: ['./patroltracker.css']
 })
 export class PatrolTrackerComponent implements OnInit, OnDestroy {
+  sourceLang:any;
+  sourceLat:any;
+  destinationLang:any;
+  destinationLat:any;
   private changeDetectorRef: ChangeDetectorRef;
   data: GeoJSON.FeatureCollection<GeoJSON.LineString>;
   routes: any={
@@ -112,12 +117,20 @@ isSettings:boolean=false;
   openBottomSheet(): void {
     this.bottomSheet.open(JobdetailComponent);
   }
-  
+  getRoute(){
+    
+    this.options = {
+      "coords": { startLang: this.sourceLang, startLat: this.sourceLat, endLang: this.destinationLang, endLat: this.destinationLat }
+    }
+    this.ngOnInit();
+  }
   ngOnInit() {
     if (this.patrolservice.validateLink(this.activeRoute.snapshot.params.jobid) == 1) {
       this.storeToken();
-      this.options = {
-        "coords": { startLang: 145.180533, startLat: -37.952297, endLang: 144.959936, endLat: -37.815563 }
+      if(this.sourceLang =="" || !this.sourceLang){
+        this.options = {
+          "coords": { startLang: 145.180533, startLat: -37.952297, endLang: 144.959936, endLat: -37.815563 }
+        }
       }
       
       if (this.req3) {
@@ -222,6 +235,9 @@ isSettings:boolean=false;
     if(key=='source') {
       this.center = [this.data.features[0].geometry.coordinates[0][0], this.data.features[0].geometry.coordinates[0][1]];
     }
+    if(key == 'zoom'){
+      this.zoom = [10];
+    }
   }
   animate() {
     if (this.counter < this.coords.length) {
@@ -246,7 +262,7 @@ isSettings:boolean=false;
         };
         feature.geometry.coordinates = this.routes.features[0].geometry.coordinates[this.counter];
         this.feature = JSON.parse(JSON.stringify(feature));
-        this.handleId =  window.AnimationFrame(()=>{this.animate();});
+        this.handleId =  window.requestAnimationFrame(()=>{this.animate();});
       });
     }
     this.counter = this.counter + 1;

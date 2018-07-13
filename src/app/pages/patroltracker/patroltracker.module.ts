@@ -9,13 +9,13 @@ import { MatBottomSheet, MatBottomSheetModule } from '@angular/material';
 import { environment } from '../../../environments/environment';
 import { PatrolTrackerService } from './patroltracker.service';
 import { PolyLineService } from './polyline.service';
-
+import {FormsModule} from '@angular/forms';
 
 
 
 @NgModule({
   imports: [
-    routing,CommonModule,MatBottomSheetModule,
+    routing,CommonModule,MatBottomSheetModule,FormsModule,
     NgxMapboxGLModule.forRoot({
       accessToken: environment.accessTokenMapbox
     }),
