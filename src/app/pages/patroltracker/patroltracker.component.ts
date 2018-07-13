@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
 import { LngLatLike } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
-import { MatBottomSheet } from '@angular/material';
+import { MatBottomSheet, ICON_REGISTRY_PROVIDER_FACTORY } from '@angular/material';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PatrolTrackerService } from './patroltracker.service';
@@ -9,6 +9,7 @@ import { FeatureCollection } from '@turf/helpers';
 import { interval, Subscription, } from 'rxjs';
 import { animationFrameScheduler } from 'rxjs';
 import { PolyLineService } from './polyline.service';
+import { log } from 'util';
 import { parse } from 'url';
 declare var turf: any;
 
@@ -33,9 +34,15 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
         }
     }]
 };
+isSettings:boolean=false;
   center: LngLatLike;
   zoom = [0];
   pitch: number;
+  paint:any = {
+    'line-color': 'blue',
+    'line-opacity': 0,
+    'line-width': 7
+};
   showMarker: boolean = false;
   index = -1;
   req: any;
@@ -112,6 +119,7 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
       this.options = {
         "coords": { startLang: 145.180533, startLat: -37.952297, endLang: 144.959936, endLat: -37.815563 }
       }
+      
       if (this.req3) {
         this.req3.unsubscribe();
       }
@@ -125,14 +133,16 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
         this.req4 = this.patrolservice.getPatrolLocation(this.index).subscribe(pdata => {
           this.options.coords.startLang = pdata.longitude;
           this.options.coords.startLat = pdata.latitude;
-          this.zoom = [13];
+          this.zoom = [10];
           this.pitch = 30;
           let coords: any[] = JSON.parse(localStorage.getItem('coords')) || [];
+          this.center = [this.options.coords.endLang, this.options.coords.endLat];
           this.timerMarker = interval(6000, animationFrameScheduler).subscribe(() => {
             this.index++;
             if (this.index == coords.length - 1 || this.options.coords.startLang == 0 || this.options.coords.startLat == 0 || this.options.coords.endLang == 0 || this.options.coords.endLat == 0) {
               this.endRoute();
             } else {
+              
               this.createRoutes(this.options.coords);
             }
           });
@@ -181,7 +191,7 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
       this.rotateMarker.transform = angel;
       this.rotateMarker = Object.assign({}, this.rotateMarker);
       this.data = Object.assign({}, data);
-      this.center = [longLat.startLang, longLat.startLat];
+      //this.center = [longLat.startLang, longLat.startLat]; use this to set screen on center while moving the object
       this.showMarker = true;
       this.index++;
       this.feature = JSON.parse(JSON.stringify(this.feature));
@@ -196,6 +206,22 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
         this.createRoutes(this.options.coords);
       });
     });
+  }
+  setOption(key,value){
+    if(key=='routepath') {
+      this.paint = Object.assign({
+        'line-color': 'blue',
+        'line-opacity': value,
+        'line-width': 7
+    })
+    console.log("----------------- ",key,value);
+    }
+    if(key=='destination') {
+      this.center = [this.options.coords.endLang, this.options.coords.endLat];
+    }
+    if(key=='source') {
+      this.center = [this.data.features[0].geometry.coordinates[0][0], this.data.features[0].geometry.coordinates[0][1]];
+    }
   }
   animate() {
     if (this.counter < this.coords.length) {
@@ -220,7 +246,7 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
         };
         feature.geometry.coordinates = this.routes.features[0].geometry.coordinates[this.counter];
         this.feature = JSON.parse(JSON.stringify(feature));
-        this.handleId =  window.requestAnimFrame(()=>{this.animate();});
+        this.handleId =  window.AnimationFrame(()=>{this.animate();});
       });
     }
     this.counter = this.counter + 1;
@@ -326,6 +352,9 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
     this.req3.unsubscribe();
     this.req2.unsubscribe();
     this.req.unsubscribe();
+  }
+  openSettings(){
+    this.isSettings =!this.isSettings;
   }
 }
 
