@@ -40,6 +40,8 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
   index = -1;
   req: any;
   req2: any;
+  req3: any;
+  req4: any;
   coords: any = [];
   handleId: any
   counter: number = 0;
@@ -110,11 +112,17 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
       this.options = {
         "coords": { startLang: 145.180533, startLat: -37.952297, endLang: 144.959936, endLat: -37.815563 }
       }
+      if (this.req3) {
+        this.req3.unsubscribe();
+      }
       this.destfeature.geometry.coordinates = [this.options.coords.endLang,this.options.coords.endLat]
-      this.patrolservice.getBreakDownDetails(this.activeRoute.snapshot.params.jobid).subscribe(data => {
+      this.req3 = this.patrolservice.getBreakDownDetails(this.activeRoute.snapshot.params.jobid).subscribe(data => {
         this.options.coords.endLang = data.longitude;
         this.options.coords.endLat = data.latitude;
-        this.patrolservice.getPatrolLocation(this.index).subscribe(pdata => {
+        if (this.req4) {
+          this.req4.unsubscribe();
+        }
+        this.req4 = this.patrolservice.getPatrolLocation(this.index).subscribe(pdata => {
           this.options.coords.startLang = pdata.longitude;
           this.options.coords.startLat = pdata.latitude;
           this.zoom = [13];
@@ -195,8 +203,24 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
         //this.feature.geometry!.coordinates = this.routes.features[0].geometry.coordinates[this.counter];
         
         //this.changeDetectorRef.detectChanges();
-        this.feature.geometry!.coordinates = this.coords[this.counter];
-       // this.handleId =  window.requestAnimFrame(()=>{this.animate();});
+        //this.feature.geometry!.coordinates = this.coords[this.counter];
+        const feature: any = {
+          'type': 'Feature',
+          'properties': {
+            'description': 'Foo',
+            'iconSize': [60, 60]
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [
+              0,
+              0
+            ]
+          }
+        };
+        feature.geometry.coordinates = this.routes.features[0].geometry.coordinates[this.counter];
+        this.feature = JSON.parse(JSON.stringify(feature));
+        this.handleId =  window.requestAnimFrame(()=>{this.animate();});
       });
     }
     this.counter = this.counter + 1;
@@ -298,6 +322,10 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
 
     this.timerMarker.unsubscribe();
+    this.req4.unsubscribe();
+    this.req3.unsubscribe();
+    this.req2.unsubscribe();
+    this.req.unsubscribe();
   }
 }
 
