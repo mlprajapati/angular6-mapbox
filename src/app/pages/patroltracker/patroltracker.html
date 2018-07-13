@@ -17,9 +17,9 @@
             <button mat-mini-fab color="primary" (click)="getRoute()">OK</button>
     </div> 
 </div>-->
-<section class="mapContent" *ngIf="!isDetailedView">
+<section class="mapContent">
     <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true"
-        [pitch]="pitch" movingMethod="jumpTo" [cursorStyle]="cursorStyle" [fitBounds]='bounds'>
+        [pitch]="pitch" movingMethod="jumpTo" >
 
         <mgl-marker id="dest" *ngIf="showMarker" [feature]="destfeature">
             <!-- <div (click)="onClick(destfeature)" class="markersource" style="background-image: url(../assets/images/descmarker.png);">
@@ -69,7 +69,7 @@
         </div>
     </div>
 
-<div class="footer" *ngIf="!isDetailedView" (click)="openBottomSheet()" fxLayout="row" fxLayoutAlign="center center">
+<div class="footer" (click)="openBottomSheet()" fxLayout="row" fxLayoutAlign="center center">
     <div fxLayout="row" fxLayoutAlign="center center">
         <strong> Estimated Travel Time : {{estimatedTime}} min</strong>
     </div>
