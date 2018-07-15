@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
-import { LngLatLike } from 'mapbox-gl';
+import { LngLatLike, LngLatBounds } from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet, ICON_REGISTRY_PROVIDER_FACTORY } from '@angular/material';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
@@ -124,6 +124,7 @@ isSettings:boolean=false;
     }
     this.ngOnInit();
   }
+  bounds:any = [[145.180533,-37.952297], [144.959936, -37.815563]]
   ngOnInit() {
     if (this.patrolservice.validateLink(this.activeRoute.snapshot.params.jobid) == 1) {
       this.storeToken();
@@ -150,6 +151,8 @@ isSettings:boolean=false;
           this.pitch = 30;
           let coords: any[] = JSON.parse(localStorage.getItem('coords')) || [];
           this.center = [this.options.coords.endLang, this.options.coords.endLat];
+          
+          this.bounds = [[145.180533,-37.952297], [144.959936, -37.815563]];
           this.timerMarker = interval(6000, animationFrameScheduler).subscribe(() => {
             this.index++;
             if (this.index == coords.length - 1 || this.options.coords.startLang == 0 || this.options.coords.startLat == 0 || this.options.coords.endLang == 0 || this.options.coords.endLat == 0) {
@@ -191,19 +194,24 @@ isSettings:boolean=false;
     };
     
       const coordinates = data.features[0].geometry.coordinates;
+      //debugger
+
+      
       this.coords = data.features[0].geometry.coordinates;
       routes.features[0].geometry.coordinates[0]=this.coords[0];
       routes.features[0].geometry.coordinates[1]=this.coords[1];
       this.routes = JSON.parse(JSON.stringify(routes));
-      if (this.index == 0) {
-        localStorage.setItem('coords', JSON.stringify(coordinates));
-      }
+     
       var angel: string = this.trunBasedOnBearing2(data);//this.trunBasedOnBearing(response.routes[0].legs[0].steps,coordinates[0]);
       this.rotateMarker["-ms-transform"] = angel;
       this.rotateMarker["-webkit-transform"] = angel;
       this.rotateMarker.transform = angel;
       this.rotateMarker = Object.assign({}, this.rotateMarker);
       this.data = Object.assign({}, data);
+      if (this.index == 0) {
+        localStorage.setItem('coords', JSON.stringify(coordinates));
+        this.zoomToBounds(coordinates);
+      }
       //this.center = [longLat.startLang, longLat.startLat]; use this to set screen on center while moving the object
       this.showMarker = true;
       this.index++;
@@ -219,6 +227,12 @@ isSettings:boolean=false;
         this.createRoutes(this.options.coords);
       });
     });
+  }
+  zoomToBounds() {
+    const coordinates = this.data.features[0].geometry.coordinates;
+    this.bounds = coordinates.reduce((bounds, coord) => {
+        return bounds.extend(<any>coord);
+    }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
   setOption(key,value){
     if(key=='routepath') {
@@ -236,7 +250,7 @@ isSettings:boolean=false;
       this.center = [this.data.features[0].geometry.coordinates[0][0], this.data.features[0].geometry.coordinates[0][1]];
     }
     if(key == 'zoom'){
-      this.zoom = [10];
+      this.zoomToBounds();
     }
   }
   animate() {
@@ -372,5 +386,6 @@ isSettings:boolean=false;
   openSettings(){
     this.isSettings =!this.isSettings;
   }
+  
 }
 

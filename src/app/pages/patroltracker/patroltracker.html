@@ -19,7 +19,9 @@
 </div>-->
 <section class="mapContent">
     <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true"
-        [pitch]="pitch" movingMethod="jumpTo" >
+        [pitch]="pitch" movingMethod="jumpTo" [fitBounds]="bounds" [fitBoundsOptions]="{
+            padding: 20
+          }">
 
         <mgl-marker id="dest" *ngIf="showMarker" [feature]="destfeature">
             <!-- <div (click)="onClick(destfeature)" class="markersource" style="background-image: url(../assets/images/descmarker.png);">
@@ -50,6 +52,9 @@
             'line-width': 7
         }">
         </mgl-layer>
+        <mgl-control
+        mglNavigation position='bottom-left'
+      ></mgl-control>
     </mgl-map>
 </section>
 
