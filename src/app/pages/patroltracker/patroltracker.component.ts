@@ -11,7 +11,7 @@ import { animationFrameScheduler } from 'rxjs';
 import { PolyLineService } from './polyline.service';
 import { log } from 'util';
 import { parse } from 'url';
-declare var turf: any;
+declare var turf: any; //importing turf library features in variable turf.
 
 
 @Component({
@@ -39,6 +39,11 @@ export class PatrolTrackerComponent implements OnInit, OnDestroy {
         }
     }]
 };
+
+/**
+ * plotting route on map
+ */
+
 isSettings:boolean=false;
   center: LngLatLike;
   zoom = [0];
@@ -48,6 +53,10 @@ isSettings:boolean=false;
     'line-opacity': 0,
     'line-width': 7
 };
+/**
+ * plotting and altering marker
+ * and its behaviour on map
+ */
   showMarker: boolean = false;
   index = -1;
   req: any;
@@ -65,6 +74,9 @@ isSettings:boolean=false;
   alert(message: string) {
     alert(message);
   }
+  /**
+   * CSS for rotating marker on Map
+  */
   rotateMarker = {
     '-ms-transform': 'rotate(-20deg)',
     '-webkit-transform': 'rotate(-20deg)',
@@ -85,6 +97,9 @@ isSettings:boolean=false;
       ]
     }
   };
+  /** Destination marker coordinates
+   *  and other properties seeting
+  */
   feature: any = {
     'type': 'Feature',
     'properties': {
@@ -114,9 +129,17 @@ isSettings:boolean=false;
       this.changeDetectorRef = changeDetectorRef;
      
   }
+  /**
+   * Material bottom triggering function
+   */
   openBottomSheet(): void {
     this.bottomSheet.open(JobdetailComponent);
   }
+  /** 
+   * getting route and other details
+   * using source and destination
+   * coordinates.      
+  */
   getRoute(){
     
     this.options = {
@@ -144,6 +167,9 @@ isSettings:boolean=false;
         if (this.req4) {
           this.req4.unsubscribe();
         }
+        /**
+         * getting patrol vehicle location by source coordinates.
+         */
         this.req4 = this.patrolservice.getPatrolLocation(this.index).subscribe(pdata => {
           this.options.coords.startLang = pdata.longitude;
           this.options.coords.startLat = pdata.latitude;
@@ -166,7 +192,11 @@ isSettings:boolean=false;
       });
     }
   }
-
+  /**
+   * Creates the route by hitting Mapbox direction API,
+   * the response comes with distance, duration ,etc of the route.
+   * @param longLat has the object of source and desination coordinates.
+   */
   private createRoutes(longLat) {
     if (this.req) {
       this.req.unsubscribe();
@@ -194,14 +224,13 @@ isSettings:boolean=false;
     };
     
       const coordinates = data.features[0].geometry.coordinates;
-      //debugger
-
-      
       this.coords = data.features[0].geometry.coordinates;
       routes.features[0].geometry.coordinates[0]=this.coords[0];
       routes.features[0].geometry.coordinates[1]=this.coords[1];
       this.routes = JSON.parse(JSON.stringify(routes));
-     
+     /**
+      * angel calculates the rotation angle.
+      */
       var angel: string = this.trunBasedOnBearing2(data);//this.trunBasedOnBearing(response.routes[0].legs[0].steps,coordinates[0]);
       this.rotateMarker["-ms-transform"] = angel;
       this.rotateMarker["-webkit-transform"] = angel;
@@ -212,7 +241,6 @@ isSettings:boolean=false;
         localStorage.setItem('coords', JSON.stringify(coordinates));
         this.zoomToBounds();
       }
-      //this.center = [longLat.startLang, longLat.startLat]; use this to set screen on center while moving the object
       this.showMarker = true;
       this.index++;
       this.feature = JSON.parse(JSON.stringify(this.feature));
@@ -224,16 +252,27 @@ isSettings:boolean=false;
       this.req2 = this.patrolservice.getPatrolLocation(this.index).subscribe(pdata => {
         this.options.coords.startLang = pdata.longitude;
         this.options.coords.startLat = pdata.latitude;
+        //this.zoomToBounds();
         this.createRoutes(this.options.coords);
       });
     });
   }
+  /**
+   * calculate bounds<LngLatBounds>
+   * to fit map around the given marker(s) coordinates .
+   */
   zoomToBounds() {
     const coordinates = this.data.features[0].geometry.coordinates;
     this.bounds = coordinates.reduce((bounds, coord) => {
         return bounds.extend(<any>coord);
     }, new LngLatBounds(coordinates[0], coordinates[0]));
   }
+  /**
+   * check for various options provided in settings.
+   * Each option has given some parameter for conditional statements.
+   * @param key is the conditional string for various options in settings.
+   * @param value opacity value(number).
+   */
   setOption(key,value){
     if(key=='routepath') {
       this.paint = Object.assign({
@@ -253,13 +292,13 @@ isSettings:boolean=false;
       this.zoomToBounds();
     }
   }
+  /**
+   * animate the patrol marker for smooth navigation.
+   */
   animate() {
     if (this.counter < this.coords.length) {
       this.ngZone.runOutsideAngular(() => {
-        //this.feature.geometry!.coordinates = this.routes.features[0].geometry.coordinates[this.counter];
-        
-        //this.changeDetectorRef.detectChanges();
-        //this.feature.geometry!.coordinates = this.coords[this.counter];
+       
         const feature: any = {
           'type': 'Feature',
           'properties': {
@@ -281,10 +320,14 @@ isSettings:boolean=false;
     }
     this.counter = this.counter + 1;
   }
+  /**
+   * clears the timeMarker interval subscription,
+   * route the application to the feedback page.
+   */
   private endRoute(){
     if (this.timerMarker) {
       this.counter = this.coords.length;
-      //cancelAnimationFrame(this.handleId);
+      
       this.timerMarker.unsubscribe();
     }
     this.router.navigate(['./pages/feedback']);
@@ -310,12 +353,12 @@ isSettings:boolean=false;
       // Update the route with calculated arc coordinates
       this.routes.features[0].geometry.coordinates =[];
       this.routes.features[0].geometry.coordinates = arc;
-      //this.routes = JSON.parse(JSON.stringify(this.routes));
+     
       var i=0;
       if(this.timer){
         this.timer.unsubscribe();
       }
-      //debugger;
+
       this.timer = interval(0, animationFrameScheduler).subscribe(() => {
         if (i < this.routes.features[0].geometry.coordinates.length-1) {
           if(i<this.routes.features[0].geometry.coordinates.length){
@@ -340,14 +383,12 @@ isSettings:boolean=false;
           i++;
         }
         else {
-              //window.clearInterval(this.timer);
               this.timer.unsubscribe();
-              //this.showMarker = false;
-              //this.router.navigate(['./pages/feedback']);
+              
             }
         
       });
-      //this.animate();
+    
   }
   private storeToken() {
     sessionStorage.setItem("patrolservice", JSON.stringify({ "jobid": this.activeRoute.snapshot.params.jobid, "token": this.activeRoute.snapshot.params.jobid }));
@@ -367,6 +408,10 @@ isSettings:boolean=false;
     });
     return this.angle;
   }
+  /**
+   * calculate bearing and then degrees to rotate the marker with the turf library functions. 
+   * @param routes is the direction API response featureCollection in const data object.
+   */
   private trunBasedOnBearing2(routes) {
     var angle = 'rotate(' + (turf.bearing(
       turf.point(routes.features[0].geometry.coordinates[this.counter]),
@@ -383,6 +428,11 @@ isSettings:boolean=false;
     this.req2.unsubscribe();
     this.req.unsubscribe();
   }
+  /**
+   * open side setting toolbox.
+   * user can show/hide the route on/from map.
+   * reset the zoom level.
+   */
   openSettings(){
     this.isSettings =!this.isSettings;
   }
