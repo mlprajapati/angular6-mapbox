@@ -210,7 +210,7 @@ isSettings:boolean=false;
       this.data = Object.assign({}, data);
       if (this.index == 0) {
         localStorage.setItem('coords', JSON.stringify(coordinates));
-        this.zoomToBounds(coordinates);
+        this.zoomToBounds();
       }
       //this.center = [longLat.startLang, longLat.startLat]; use this to set screen on center while moving the object
       this.showMarker = true;
