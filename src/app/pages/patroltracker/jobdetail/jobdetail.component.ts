@@ -10,7 +10,10 @@ import { HeaderComponent } from '../../../shared/components/header/header.compon
 export class JobdetailComponent {
 
   constructor(private bottomSheetRef: MatBottomSheetRef<JobdetailComponent>) { }
-
+  /**
+   * close bottom-sheet and go back to patroltracker page.
+   * @param event mouse event
+   */
   goBack(event: MouseEvent):void{
     this.bottomSheetRef.dismiss();
     event.preventDefault();
