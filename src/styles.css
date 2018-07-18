@@ -44,7 +44,15 @@ body {
   display: none !important;
 }
 .mapboxgl-ctrl-group{
-  border-radius: 20px;
+  border-radius: 25px;
+}
+.mapboxgl-ctrl-group > button {
+  width: 50px !important;
+  height: 50px !important;
+}
+.mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > .mapboxgl-ctrl-compass-arrow {
+  width: 40px !important;
+  height: 40px !important;
 }
 .mapboxgl-ctrl-compass {
   
