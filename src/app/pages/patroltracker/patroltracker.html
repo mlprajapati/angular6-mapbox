@@ -18,10 +18,10 @@
     </div> 
 </div>-->
 <section class="mapContent">
-    <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true"
+    <mgl-map id="map" [style]="'mapbox://styles/mapbox/light-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true"
         [pitch]="pitch" movingMethod="jumpTo" [fitBounds]="bounds" [fitBoundsOptions]="{
             padding: 50
-          }">
+          }" [doubleClickZoom]="false" (dblClick)="zoomOndblClick()" (load)="map = $event">
 
         <mgl-marker id="dest" *ngIf="showMarker" [feature]="destfeature">
             <!-- <div (click)="onClick(destfeature)" class="markersource" style="background-image: url(../assets/images/descmarker.png);">

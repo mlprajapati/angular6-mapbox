@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
-import { LngLatLike, LngLatBounds } from 'mapbox-gl';
+import { LngLatLike, LngLatBounds,Map} from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet, ICON_REGISTRY_PROVIDER_FACTORY } from '@angular/material';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
@@ -20,10 +20,12 @@ declare var turf: any; //importing turf library features in variable turf.
   styleUrls: ['./patroltracker.css']
 })
 export class PatrolTrackerComponent implements OnInit, OnDestroy {
+  map:Map;
   sourceLang:any;
   sourceLat:any;
   destinationLang:any;
   destinationLat:any;
+  private currentZoomLevel = 10;
   private changeDetectorRef: ChangeDetectorRef;
   data: GeoJSON.FeatureCollection<GeoJSON.LineString>;
   routes: any={
@@ -118,7 +120,7 @@ isSettings:boolean=false;
     "type": "FeatureCollection",
     "features": []
   };
-
+ 
   constructor(private activeRoute: ActivatedRoute,
     private router: Router,
     public http: HttpClient,
@@ -173,7 +175,7 @@ isSettings:boolean=false;
         this.req4 = this.patrolservice.getPatrolLocation(this.index).subscribe(pdata => {
           this.options.coords.startLang = pdata.longitude;
           this.options.coords.startLat = pdata.latitude;
-          this.zoom = [10];
+          this.zoom = [this.currentZoomLevel];
           this.pitch = 30;
           let coords: any[] = JSON.parse(localStorage.getItem('coords')) || [];
           this.center = [this.options.coords.endLang, this.options.coords.endLat];
@@ -436,6 +438,14 @@ isSettings:boolean=false;
   openSettings(){
     this.isSettings =!this.isSettings;
   }
-  
+  zoomOndblClick(){
+    var zoomLevel = this.map.getZoom();
+    if(zoomLevel>0){
+      zoomLevel--;
+      this.ngZone.runOutsideAngular(() => {
+        this.map.setZoom(zoomLevel);
+      });
+    }
+  }
 }
 
