@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ElementRef } from '@angular/core';
 import { LngLatLike, LngLatBounds,Map} from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet, ICON_REGISTRY_PROVIDER_FACTORY } from '@angular/material';
@@ -121,7 +121,7 @@ isSettings:boolean=false;
     "features": []
   };
  
-  constructor(private activeRoute: ActivatedRoute,
+  constructor(private activeRoute: ActivatedRoute,private elRef:ElementRef,
     private router: Router,
     public http: HttpClient,
     public bottomSheet: MatBottomSheet,
@@ -131,6 +131,7 @@ isSettings:boolean=false;
       this.changeDetectorRef = changeDetectorRef;
      
   }
+
   /**
    * Material bottom triggering function
    */
@@ -439,13 +440,15 @@ isSettings:boolean=false;
     this.isSettings =!this.isSettings;
   }
   zoomOndblClick(){
-    var zoomLevel = this.map.getZoom();
-    if(zoomLevel>0){
-      zoomLevel--;
-      this.ngZone.runOutsideAngular(() => {
-        this.map.setZoom(zoomLevel);
-      });
-    }
+    // var zoomLevel = this.map.getZoom();
+    // if(zoomLevel>0){
+    //   zoomLevel--;
+    //   this.ngZone.runOutsideAngular(() => {
+    //     this.map.setZoom(zoomLevel);
+    //   });
+    // }
+    this.elRef.nativeElement.querySelector('.mapboxgl-ctrl-zoom-out').click();
+
   }
 }
 
