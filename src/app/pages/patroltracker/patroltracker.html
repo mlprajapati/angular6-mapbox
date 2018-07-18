@@ -20,7 +20,7 @@
 <section class="mapContent">
     <mgl-map id="map" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true"
         [pitch]="pitch" movingMethod="jumpTo" [fitBounds]="bounds" [fitBoundsOptions]="{
-            padding: 20
+            padding: 50
           }">
 
         <mgl-marker id="dest" *ngIf="showMarker" [feature]="destfeature">
@@ -34,8 +34,8 @@
         </mgl-popup>
        
         <mgl-marker id="source" *ngIf="showMarker" [feature]="feature">
-
-            <div class="marker" [ngStyle]="rotateMarker" style="background-image: url(../assets/images/car.png);">
+            <!-- [ngStyle]="rotateMarker" -->
+            <div class="marker"  style="background-image: url(../assets/images/Van1x.png);">
             </div>
         </mgl-marker>
 
@@ -58,7 +58,7 @@
     </mgl-map>
 </section>
 
-<div class="settings" >
+<div class="settings" style="display:none;">
         <div (click)="openSettings()">
                 <button type="button" mat-raised-button color="primary" fxFlex="100%">Settings</button>
         </div>

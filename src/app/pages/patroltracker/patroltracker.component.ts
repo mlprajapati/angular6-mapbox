@@ -50,8 +50,8 @@ isSettings:boolean=false;
   pitch: number;
   paint:any = {
     'line-color': 'blue',
-    'line-opacity': 0,
-    'line-width': 7
+    'line-opacity': 0.75,
+    'line-width': 5
 };
 /**
  * plotting and altering marker
