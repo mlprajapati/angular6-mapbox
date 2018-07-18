@@ -131,7 +131,9 @@ isSettings:boolean=false;
       this.changeDetectorRef = changeDetectorRef;
      
   }
-
+  //  ngAfterViewInit() {
+  //    this.elRef.nativeElement.querySelector('.mapboxgl-ctrl-zoom-out');
+  //  }
   /**
    * Material bottom triggering function
    */
