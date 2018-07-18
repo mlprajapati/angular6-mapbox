@@ -74,11 +74,14 @@
         </div>
     </div>
 
-<div class="footer" (click)="openBottomSheet()" fxLayout="row" fxLayoutAlign="center center">
-    <div fxLayout="row" fxLayoutAlign="center center">
-        <strong> Estimated Travel Time : {{estimatedTime}} min</strong>
+<div class="footer" (click)="openBottomSheet()" fxLayout="row" fxLayoutAlign="none none">
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80">
+        <strong> Estimated Travel Time :</strong>
     </div>
-   <!--  <div fxLayout="row" fxLayoutAlign="center center">
+    <div class="estimate" fxLayout="row" fxLayoutAlign="center center" fxFlex="20">
         <strong> {{estimatedTime}} min</strong>
-    </div> -->
+    </div>
+</div>
+<div *ngIf="details">
+    <app-jobdetail (closeChildWindow)="hideChildWindow(status)"></app-jobdetail>
 </div>

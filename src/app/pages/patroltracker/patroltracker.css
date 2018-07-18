@@ -37,6 +37,7 @@ mgl-map {
   color: black;
   text-align: center;
   height:50px;
+  box-shadow: 1px 3px 4px 5px grey;
 }
 .settings{
   position: fixed;
@@ -84,5 +85,9 @@ li{
 
 .example-full-width {
   width: 50%;
+}
+.estimate{
+  background: #0074d9;
+  color: #ffffff;
 }
 

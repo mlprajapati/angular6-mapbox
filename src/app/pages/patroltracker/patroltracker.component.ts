@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ElementRef, ViewChild } from '@angular/core';
 import { LngLatLike, LngLatBounds,Map} from 'mapbox-gl';
 import { HttpClient } from '@angular/common/http';
 import { MatBottomSheet, ICON_REGISTRY_PROVIDER_FACTORY } from '@angular/material';
@@ -9,6 +9,7 @@ import { FeatureCollection } from '@turf/helpers';
 import { interval, Subscription, } from 'rxjs';
 import { animationFrameScheduler } from 'rxjs';
 import { PolyLineService } from './polyline.service';
+import { SharedModule } from '../../shared/shared.module';
 import { log } from 'util';
 import { parse } from 'url';
 declare var turf: any; //importing turf library features in variable turf.
@@ -21,6 +22,8 @@ declare var turf: any; //importing turf library features in variable turf.
 })
 export class PatrolTrackerComponent implements OnInit, OnDestroy {
   map:Map;
+  @ViewChild(JobdetailComponent) child: JobdetailComponent;
+  details:boolean = false;
   sourceLang:any;
   sourceLat:any;
   destinationLang:any;
@@ -53,7 +56,7 @@ isSettings:boolean=false;
   paint:any = {
     'line-color': 'blue',
     'line-opacity': 0.75,
-    'line-width': 5
+    'line-width': 1
 };
 /**
  * plotting and altering marker
@@ -138,7 +141,10 @@ isSettings:boolean=false;
    * Material bottom triggering function
    */
   openBottomSheet(): void {
-    this.bottomSheet.open(JobdetailComponent);
+   // this.bottomSheet.open(JobdetailComponent);
+    //this.router.navigate(['./pages/patroltracker/:jobid/jobdetails']);
+    this.details = true;
+    
   }
   /** 
    * getting route and other details
@@ -451,6 +457,11 @@ isSettings:boolean=false;
     // }
     this.elRef.nativeElement.querySelector('.mapboxgl-ctrl-zoom-out').click();
 
+  }
+  hideChildWindow(status) {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    this.details = status;
   }
 }
 

@@ -16,7 +16,8 @@ import {
     MatTooltipModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
   } from '@angular/material';
   import {NgModule} from '@angular/core';
   //import {MatCardModule} from '@angular/material/card';
@@ -40,7 +41,8 @@ import {
       MatDialogModule,
       MatSidenavModule,
       MatToolbarModule,
-      MatCardModule
+      MatCardModule,
+      MatExpansionModule
       
     ],
     exports: [
@@ -61,7 +63,8 @@ import {
       MatDialogModule,
       MatSidenavModule,
       MatToolbarModule,
-      MatCardModule
+      MatCardModule,
+      MatExpansionModule
       
     ],
   })

@@ -1,5 +1,5 @@
-import { Component} from '@angular/core';
-import { MatBottomSheetRef } from '@angular/material';
+import { Component, Output, EventEmitter} from '@angular/core';
+// import { MatBottomSheetRef } from '@angular/material';
 import { HeaderComponent } from '../../../shared/components/header/header.component';
 @Component({
   selector: 'app-jobdetail',
@@ -8,15 +8,18 @@ import { HeaderComponent } from '../../../shared/components/header/header.compon
 })
 
 export class JobdetailComponent {
-
-  constructor(private bottomSheetRef: MatBottomSheetRef<JobdetailComponent>) { }
+  panelOpenState = false;
+  @Output() closeChildWindow = new EventEmitter<boolean>();
+  
+  constructor(/*private bottomSheetRef: MatBottomSheetRef<JobdetailComponent>*/) { }
   /**
    * close bottom-sheet and go back to patroltracker page.
    * @param event mouse event
    */
   goBack(event: MouseEvent):void{
-    this.bottomSheetRef.dismiss();
+    this.closeChildWindow.emit(false);
     event.preventDefault();
   }
+ 
 
 }
