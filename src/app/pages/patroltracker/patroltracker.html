@@ -17,7 +17,7 @@
             <button mat-mini-fab color="primary" (click)="getRoute()">OK</button>
     </div> 
 </div>-->
-<section class="mapContent">
+<section class="mapContent" *ngIf="!isLoading">
     <mgl-map id="map" [style]="'mapbox://styles/mapbox/light-v9'" [zoom]="zoom" [center]="center" [centerWithPanTo]="true"
         [pitch]="pitch" movingMethod="jumpTo" [fitBounds]="bounds" [fitBoundsOptions]="{
             padding: 50
@@ -57,7 +57,9 @@
       ></mgl-control>
     </mgl-map>
 </section>
-
+<div class="content" fxLayout="row" fxLayoutAlign="center center" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+</div>
 <div class="settings" style="display:none;">
         <div (click)="openSettings()">
                 <button type="button" mat-raised-button color="primary" fxFlex="100%">Settings</button>
@@ -74,7 +76,7 @@
         </div>
     </div>
 
-<div class="footer" (click)="openBottomSheet()" fxLayout="row" fxLayoutAlign="none none">
+<div class="footer" (click)="openBottomSheet()" fxLayout="row" fxLayoutAlign="none none" *ngIf="!isLoading">
     <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80">
         <strong> Estimated Travel Time :</strong>
     </div>

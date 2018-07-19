@@ -21,6 +21,7 @@ declare var turf: any; //importing turf library features in variable turf.
   styleUrls: ['./patroltracker.css']
 })
 export class PatrolTrackerComponent implements OnInit, OnDestroy {
+  isLoading:boolean=true;
   map:Map;
   @ViewChild(JobdetailComponent) child: JobdetailComponent;
   details:boolean = false;
@@ -195,7 +196,7 @@ isSettings:boolean=false;
             if (this.index == coords.length - 1 || this.options.coords.startLang == 0 || this.options.coords.startLat == 0 || this.options.coords.endLang == 0 || this.options.coords.endLat == 0) {
               this.endRoute();
             } else {
-              
+              this.isLoading=false;
               this.createRoutes(this.options.coords);
             }
           });
